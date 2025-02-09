@@ -1,0 +1,72 @@
+# General OS files
+.DS_Store
+Thumbs.db
+
+# Python / FastAPI
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+.env
+*.env
+instance/
+config.json
+venv/
+virtualenv/
+.venv/
+db.sqlite3
+.mypy_cache/
+.pytest_cache/
+logs/
+*.log
+
+# Node.js / React
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+.next/
+dist/
+build/
+coverage/
+*.lock
+
+# Editor / IDE files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.bak
+
+# Frontend production build
+/public/static/
+public/build/
+*.map
+
+# JSON & data files
+user_payload.json
+*.csv
+*.docx
+*.xlsx
+*.tsv
+*.json
+!public/*.json  # Allow necessary public JSON files
+
+
+# API & dependencies
+package-lock.json
+yarn.lock
+pip-log.txt
+pip-delete-this-directory.txt
+
+# TypeScript build files
+*.tsbuildinfo
+
+# Miscellaneous
+dump.rdb
+*.pid
+*.seed

@@ -1,0 +1,56 @@
+npm start
+python -m uvicorn main:app --host 127.0.0.1 --port 8001 --reload
+
+ 
+
+Demographic & Geographic Data:
+
+    Enrollment type (Self, Self + Family, Self + One).
+    ZIP code (to limit plan options to location-eligible plans and estimate regional premiums).
+    Medicare status and parts utilized (A, B, C, D).
+
+Financial Preferences:
+
+    Sensitivity to monthly premium costs versus high out-of-pocket exposure.
+    Ability to utilize HSAs/HRAs for tax-advantaged savings.
+Bugs
+	If you input all your data, and then switch to a different tab and switch back to the data input tab, all the data are lost.
+
+Ideas
+	For the data input where the dates auto fil, is it possible to have the visit information collapsed to take up less space, while still allowing the user to click-to-expand the hierarchy when they want to input data?
+
+	Only show the top ten cheapest plans in the compare graphs. Can show all the plans in a table though 
+
+	Allow users to toggle hypothetical changes, such as increasing service usage or adding unexpected healthcare events (e.g., an emergency visit).
+
+	All preventive care is free, before and after the deductible, for HDHP's. This includes annual physicals, well-child visits, immunizations, mammograms, and more. 
+
+
+
+routers (py)
+	calculate.py
+	recommendation_engine.py
+	calculate.py
+	recommend.py
+front-end (base on material UI)
+	Compare.tsx
+	Recommendations.tsx
+	Chart.tsx
+	SummaryTable.tsx
+
+
+
+
+
+premium,deductible,oop_max, if hsa or hra,hsa pass through amount
+
+
+Primary Care,Specialist,Emergency Care,Urgent Care,Accidental Injury,Inpatient Admission,Room and Board,Outpatient Surgery,Outpatient Tests,Simple Labs,Complex Labs,Medications Tier 0,Medications Tier 1,Medications Tier 2,Medications Tier 3,Medications Tier 4,Medications Tier 5,ABA,Chiropractic,OT,Speech Therapy,Physical Therapy,Infertility Services,Hearing Services,and Maternity Care
+
+
+
+
+interface ChartProps {
+  data: { x: string; y: number; label: string }[];
+}
+
