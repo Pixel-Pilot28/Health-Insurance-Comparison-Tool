@@ -133,7 +133,7 @@ def calculate_costs(user_input: Dict[str, Any], tax_rate: float, plan_type: str)
 
 
                 # Calculate tax savings and HSA growth
-                contribution = hsa_contribution + hsa_pass_through if has_hsa else fsa_contribution
+                contribution = hsa_contribution if has_hsa else fsa_contribution
                 tax_savings = calculate_tax_savings(contribution, tax_rate)
                 hsa_growth = calculate_hsa_growth(hsa_contribution, hsa_pass_through, hsa_percent_spent, assumed_rate_of_return) if has_hsa else 0.0
                 total_premiums = premium * 12
@@ -153,7 +153,7 @@ def calculate_costs(user_input: Dict[str, Any], tax_rate: float, plan_type: str)
 
                 # Process each service from user input
                 for service, details in user_input.items():
-                    if service in ['planType', 'hsa', 'fsa', 'income', 'assumedRateOfReturn', 'hsaPercentSpent']:
+                    if service in ['planType', 'hsa', 'fsa', 'income', 'assumedRateOfReturn', 'hsaPercentSpent', 'hsacontribution']:
                         continue
 
                     # Get average service cost
