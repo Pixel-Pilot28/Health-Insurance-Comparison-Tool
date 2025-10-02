@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Any
 
 
 class HSAData(BaseModel):
@@ -31,6 +31,10 @@ class MedicalNeed(BaseModel):
 class InputDetails(BaseModel):
     user_data: UserData
     medical_needs: Dict[str, MedicalNeed]
+
+class CalculationPayload(BaseModel):
+    user_data: Dict[str, Any]
+    input_details: Dict[str, Any]
 
 # class HealthPlan(BaseModel):
 #     id: int

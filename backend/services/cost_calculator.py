@@ -4,10 +4,14 @@ import os
 
 try:
     # For production use with uvicorn or FastAPI
-    from routers.health_plans import get_parsed_health_plans
+    from ..routers.health_plans import get_parsed_health_plans
 except ImportError:
-    # For running script directly with `python -m`
-    from backend.routers.health_plans import get_parsed_health_plans
+    try:
+        # Fallback for different import contexts
+        from routers.health_plans import get_parsed_health_plans
+    except ImportError:
+        # For running script directly with `python -m`
+        from backend.routers.health_plans import get_parsed_health_plans
 
 # Dynamically resolve the path to the average service costs file
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -50,8 +54,7 @@ def calculate_hsa_growth(hsa_contribution: float, hsa_pass_through: float,
         investment_gain = hsa_balance * monthly_return_rate
         hsa_balance += investment_gain
         total_growth += investment_gain
-    print("HSA contribution:", hsa_contribution, "HSA pass through:", hsa_pass_through, "HSA percent spent:", hsa_percent_spent)
-    print("Total growth:", total_growth)
+
     return round(total_growth, 2)
     
 
@@ -101,40 +104,67 @@ def calculate_service_cost(service_cost: float, frequency: int, coverage: Dict[s
 
     return round(user_pays, 2), round(deductible_remaining, 2), round(oop_remaining, 2), {k: round(v, 2) for k, v in cost_breakdown.items()}
 
-def calculate_costs(user_input: Dict[str, Any], tax_rate: float, plan_type: str) -> Dict[str, Any]:
+def calculate_costs(user_input: Dict[str, Any], user_data: Dict[str, Any], tax_rate: float, plan_type: str) -> Dict[str, Any]:
     """
     Calculate monthly and annual costs for each health plan based on user inputs.
     Returns a dictionary of results keyed by plan ID.
     """
     try:
+        print(f"DEBUG: calculate_costs called with plan_type={plan_type}")
+        print(f"DEBUG: user_input keys: {list(user_input.keys()) if user_input else 'None'}")
+        import sys
+        sys.stdout.flush()
+        
         plans = get_parsed_health_plans()
+        print(f"DEBUG: Loaded {len(plans)} health plans")
+        sys.stdout.flush()
+        
         service_costs = load_service_costs()
+        print(f"DEBUG: Loaded {len(service_costs)} service costs")
+        sys.stdout.flush()
+        
         results = {}
 
         for plan_id, plan_details in plans.items():
+            print(f"DEBUG: Processing plan {plan_id} with enrollment type {plan_details.get('enrollment_type', 'Unknown')}")
+            sys.stdout.flush()
+            
             # Filter by enrollment type
             if plan_details['enrollment_type'] != plan_type:
+                print(f"DEBUG: Skipping plan {plan_id} - enrollment type mismatch")
+                sys.stdout.flush()
                 continue
 
             try:
                 # Determine if plan is HSA eligible
-                # has_hsa = plan_details.get('hsaEligible', False)
                 has_hsa = (plan_details.get('hsa_hra_type', 'N/A') == 'HSA')
                 deductible_remaining = float(plan_details.get('deductible', 0.0))
                 oop_max = float(plan_details.get('oop_max', float('inf')))
                 oop_remaining = oop_max
                 premium = float(plan_details.get('premium', 0.0))
-                assumed_rate_of_return = float(user_input.get('assumedRateOfReturn', 0.0))
-                hsa_percent_spent = float(user_input.get('hsaPercentSpent', 1.0))
-                hsa_contribution = float(user_input.get('hsacontribution', 0.0)) if has_hsa else 0.0
-                fsa_contribution = float(user_input.get('fsa', {}).get('contribution', 0.0)) if not has_hsa else 0.0
+                assumed_rate_of_return = float(user_data.get('assumedRateOfReturn', 0.0)) / 100
+                hsa_percent_spent = float(user_data.get('hsa', {}).get('percentSpent', 1.0)) / 100
+                
+                # Fix HSA contribution extraction from user_data
+                hsa_contribution = 0.0
+                if has_hsa and 'hsa' in user_data:
+                    hsa_contribution = float(user_data['hsa'].get('contribution', 0.0))
+                
+                fsa_contribution = 0.0
+                if not has_hsa and 'fsa' in user_data:
+                    fsa_contribution = float(user_data['fsa'].get('contribution', 0.0))
+                
                 hsa_pass_through = float(plan_details.get('hsa_pass_through', 0.0)) if has_hsa else 0.0
-                income = float(user_input.get('income', 0.0))
+                income = float(user_data.get('income', 0.0))
 
 
                 # Calculate tax savings and HSA growth
-                contribution = hsa_contribution + hsa_pass_through if has_hsa else fsa_contribution
-                tax_savings = calculate_tax_savings(contribution, tax_rate)
+                # Tax savings should only apply to USER contributions, not employer pass-through
+                # Employer HSA pass-through is already a tax-free benefit
+                if has_hsa:
+                    tax_savings = calculate_tax_savings(hsa_contribution, tax_rate)
+                else:
+                    tax_savings = calculate_tax_savings(fsa_contribution, tax_rate)
                 hsa_growth = calculate_hsa_growth(hsa_contribution, hsa_pass_through, hsa_percent_spent, assumed_rate_of_return) if has_hsa else 0.0
                 total_premiums = premium * 12
 
@@ -149,47 +179,115 @@ def calculate_costs(user_input: Dict[str, Any], tax_rate: float, plan_type: str)
 
                 # Initialize monthly breakdown: each month starts with the premium
                 monthly_breakdown = {month: premium for month in range(1, 13)}
-                cumulative_cost = 0.0
-
-                # Process each service from user input
+                
+                # Group services by month for processing
+                monthly_services = {month: [] for month in range(1, 13)}
+                
+                # Process each service from user input (input_details)
                 for service, details in user_input.items():
-                    if service in ['planType', 'hsa', 'fsa', 'income', 'assumedRateOfReturn', 'hsaPercentSpent']:
+                    # user_input now only contains service details, no need to skip other fields
+                    if not isinstance(details, dict) or 'dates' not in details:
                         continue
 
                     # Get average service cost
                     service_cost_value = float(service_costs.get(service, 0.0))
                     
-                    # Retrieve coverage information from plan_details['services']
-                    raw_coverage = plan_details.get('services', {})
-                    if not isinstance(raw_coverage, dict):
-                        raw_coverage = {}
-                    coverage = raw_coverage.get(service, {})
-                    if not isinstance(coverage, dict):
-                        coverage = {}
+                    # Retrieve member cost from plan_details['services']
+                    raw_services = plan_details.get('services', {})
+                    if not isinstance(raw_services, dict):
+                        raw_services = {}
+                    member_cost_from_plan = raw_services.get(service, 0.0)  # This is the member copay (like $0.15)
 
-                    # Process each date for this service
+                    # Group services by month
                     for date in details.get('dates', []):
                         try:
                             month = int(date.split('-')[1])  # Extract month (assuming 'YYYY-MM-DD')
+                            monthly_services[month].append({
+                                'service': service,
+                                'date': date,
+                                'avg_cost': service_cost_value,  # Average service cost (not used in calculation)
+                                'member_cost': member_cost_from_plan  # Member cost from plan (this is what we use)
+                            })
                         except Exception as e:
                             print(f"Error parsing date '{date}' for service {service}: {e}")
                             continue
 
-                        user_pays, deductible_remaining, oop_remaining, cost_breakdown_detail = calculate_service_cost(
-                            service_cost_value, 1, coverage, deductible_remaining, oop_remaining
-                        )
-                        cumulative_cost += user_pays
-                        monthly_breakdown[month] += user_pays
+                # Process each month in order, using direct service costs from plan data
+                cumulative_medical_cost = 0.0
+                for month in range(1, 13):
+                    monthly_service_cost = 0.0
+                    
+                    # Process all services for this month
+                    for service_info in monthly_services[month]:
+                        # Get the member cost from the plan data and the service cost
+                        member_cost = service_info['member_cost']
+                        avg_service_cost = service_info['avg_cost']
+                        
+                        # Handle different cost formats from the CSV
+                        if isinstance(member_cost, (int, float)):
+                            member_cost_float = float(member_cost)
+                            
+                            # Determine if this is a percentage (coinsurance) or fixed copay
+                            if 0 < member_cost_float <= 1.0:
+                                # This is coinsurance (e.g., 0.15 = 15%)
+                                member_pays = avg_service_cost * member_cost_float
+                                
+                                # Apply deductible logic for coinsurance
+                                if deductible_remaining > 0:
+                                    # If deductible not met, member pays full service cost until deductible is met
+                                    deductible_applied = min(avg_service_cost, deductible_remaining)
+                                    member_pays = deductible_applied + (avg_service_cost - deductible_applied) * member_cost_float
+                                    deductible_remaining -= deductible_applied
+                                else:
+                                    # Deductible met, member pays coinsurance only
+                                    member_pays = avg_service_cost * member_cost_float
+                            else:
+                                # This is a fixed copay (e.g., $25, $30)
+                                member_pays = member_cost_float
+                                # Fixed copays typically don't apply to deductible
+                        else:
+                            # Handle string values or complex cost structures
+                            member_pays = 0.0
+                        
+                        # Apply out-of-pocket maximum
+                        if oop_remaining > 0:
+                            if member_pays > oop_remaining:
+                                member_pays = oop_remaining
+                                oop_remaining = 0.0
+                            else:
+                                oop_remaining -= member_pays
+                        else:
+                            member_pays = 0.0  # OOP max reached
+                        
+                        monthly_service_cost += member_pays
+                        cumulative_medical_cost += member_pays
+                    
+                    # Update the monthly breakdown
+                    monthly_breakdown[month] = round(monthly_breakdown[month] + monthly_service_cost, 2)
+                
+                # Use the cumulative medical cost instead of the complex deductible calculation
+                cumulative_cost = cumulative_medical_cost
 
+                # Ensure we don't exceed OOP max
                 if cumulative_cost > oop_max:
                     cumulative_cost = oop_max
 
-                total_cost = total_premiums + cumulative_cost - tax_savings - hsa_growth
+                # Calculate base cost (premiums + medical costs)
+                base_cost = total_premiums + cumulative_cost
+                
+                # Apply tax savings and HSA growth as reductions
+                # Tax savings reduce your effective cost by the tax you don't pay
+                # HSA growth is additional value you get from investment returns
+                total_cost = base_cost - tax_savings - hsa_growth
+                
+                # Ensure total cost doesn't go below zero (though it could theoretically)
+                # This accounts for cases where HSA benefits exceed actual costs
+                if total_cost < 0:
+                    total_cost = 0
 
                 # Calculate unused HSA or FSA funds
                 if has_hsa:
                     total_hsa_available = hsa_contribution + hsa_pass_through
-                    print("total HSA available:", total_hsa_available)
                     total_hsa_spent = total_hsa_available * hsa_percent_spent
                     unused_hsa = total_hsa_available - total_hsa_spent
                     unused_fsa = 0.0
@@ -199,10 +297,15 @@ def calculate_costs(user_input: Dict[str, Any], tax_rate: float, plan_type: str)
                     unused_fsa = total_fsa_available - total_fsa_spent
                     unused_hsa = 0.0
 
+                # Debug logging for specific plans
+                if "GEHA HDHP" in plan_details['plan_name'] or "APWU" in plan_details['plan_name']:
+                    print(f"DEBUG: {plan_details['plan_name']} - Premium: ${premium}, Medical Costs: ${cumulative_medical_cost}, Total: ${total_cost}", flush=True)
+                    print(f"  Monthly breakdown varies: {len(set(monthly_breakdown.values())) > 1}", flush=True)
+
                 results[plan_id] = {
                     'plan_name': plan_details['plan_name'],
                     'monthly_breakdown': {
-                        month_name: monthly_breakdown[month]
+                        month_name: round(monthly_breakdown[month], 2)
                         for month_name, month in zip(
                             ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
                             range(1, 13)

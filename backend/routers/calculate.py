@@ -1,16 +1,10 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import Dict, List
+from typing import Dict, Any, List
+from ..services.cost_calculator import calculate_costs
+from ..models import CalculationPayload
+from .health_plans import get_parsed_health_plans
 import json
-
-try:
-    from models import InputDetails
-    from services.cost_calculator import calculate_costs
-    from routers.health_plans import get_parsed_health_plans
-except ImportError:
-    from backend.models import InputDetails
-    from backend.services.cost_calculator import calculate_costs
-    from backend.routers.health_plans import get_parsed_health_plans
 
 router = APIRouter()
 
@@ -23,48 +17,48 @@ class InputDetails(BaseModel):
 
 class UserData(BaseModel):
     planType: str
-    income: float
-    taxRate: float
-    assumedRateOfReturn: float
-    hsa: Dict[str, float]
-    fsa: Dict[str, float]
-    medicare: Dict[str, float]
+    income: str  # Allow string input and convert in processing
+    taxRate: str  # Allow string input and convert in processing
+    assumedRateOfReturn: str  # Allow string input and convert in processing
+    hsa: Dict[str, str]  # Allow string input
+    fsa: Dict[str, str]  # Allow string input
+    medicare: Dict[str, str]  # Allow string input
 
 class Payload(BaseModel):
     userData: UserData
     inputDetails: Dict[str, InputDetails]
 
 @router.post("/user-data")
-def save_user_data(payload: dict):
+async def save_user_data(data: dict):
     """
-    Save the user payload from the Data Input tab to a file.
+    Save user data (e.g., from a form) to a JSON file.
     """
     try:
-        with open("data/user_payload.json", "w") as f:
-            json.dump(payload, f)
-        return {"calculate.py": "User data saved successfully"}
+        with open("backend/data/user_payload.json", "w") as f:
+            json.dump(data, f, indent=4)
+        print(f"Received user data: {data}")
+        return {"status": "success", "message": "User data saved successfully", "data": data}
     except Exception as e:
-        print(f"Error saving user data: {e}")
-        raise HTTPException(status_code=500, detail="Failed to save user data")
+        raise HTTPException(status_code=500, detail=f"Error saving user data: {str(e)}")
 
 
 @router.get("/user-data")
-def get_user_data():
+async def get_user_data():
     """
-    Retrieve the most recent user payload for the Compare tab.
+    Retrieve the user payload from the file.
     """
     try:
-        with open("data/user_payload.json", "r") as f:
-            payload = json.load(f)
-        return payload
+        with open("backend/data/user_payload.json", "r") as f:
+            data = json.load(f)
+        return {"status": "success", "data": data}
     except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="No user data found")
+        raise HTTPException(status_code=404, detail="User data not found")
     except Exception as e:
-        print(f"Error retrieving user data: {e}")
-        raise HTTPException(status_code=500, detail="Failed to fetch user data")
+        print(f"Error reading user data: {e}")
+        raise HTTPException(status_code=500, detail="Failed to read user data")
 
 
-@router.post("")
+@router.post("/calculate")
 def calculate_cost(payload: Payload):
     """
     Calculate monthly and annual costs for each health plan.
@@ -83,18 +77,29 @@ def calculate_cost(payload: Payload):
         input_details_dict = {key: value.dict() for key, value in input_details.items()}
         # print("Converted Input Details:", input_details_dict)
 
-        # Convert tax rate to decimal
-        tax_rate = user_data["taxRate"] / 100
+        # Convert string values to numbers and tax rate to decimal
+        tax_rate = float(user_data["taxRate"]) / 100
+        user_data["income"] = float(user_data["income"]) if user_data["income"] else 0
+        user_data["assumedRateOfReturn"] = float(user_data["assumedRateOfReturn"]) if user_data["assumedRateOfReturn"] else 0
+        
+        # Convert HSA, FSA, Medicare values to floats
+        for key, value in user_data["hsa"].items():
+            user_data["hsa"][key] = float(value) if value else 0
+        for key, value in user_data["fsa"].items():
+            user_data["fsa"][key] = float(value) if value else 0
+        for key, value in user_data["medicare"].items():
+            user_data["medicare"][key] = float(value) if value else 0
         # print("Processed tax rate:", tax_rate)
 
         # Load health plan data
         health_plans = get_parsed_health_plans()
         # print("Parsed plan:", health_plans)
 
-        # Perform cost calculationsS
+        # Perform cost calculations
         try:
             results = calculate_costs(
             user_input=input_details_dict,
+            user_data=user_data,
             tax_rate=tax_rate,
             plan_type=enrollment_type
         )
@@ -125,4 +130,3 @@ def calculate_cost(payload: Payload):
 
 
 
- 

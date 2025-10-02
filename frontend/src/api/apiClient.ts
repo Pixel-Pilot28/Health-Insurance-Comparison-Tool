@@ -22,7 +22,7 @@ apiClient.interceptors.response.use(
 export const fetchUserData = async () => {
   try {
     const response = await apiClient.get('/user-data');
-    return response.data;
+    return response.data.data; // Extract the actual data from the wrapper
   } catch (error) {
     console.error('Error retrieving user data:', error);
     return null;
@@ -51,14 +51,7 @@ export const submitData = async (data: any) => {
   }
 };
 
-export const calculateCost = async (payload: any) => {
-  try {
-    const response = await apiClient.post('/calculate', payload);
-    return response.data;
-  } catch (error) {
-    throw new Error("Error calculating costs");
-  }
-};
+// Remove duplicate - using calculateCosts below
 
 export const saveUserData = async (data: any) => {
   try {
@@ -86,18 +79,31 @@ export const saveUserData = async (data: any) => {
   }
 };
 
-// Retrieve user data
+// Retrieve user data (keep this as alias to fetchUserData for compatibility)
 export const getUserData = async () => {
+  return await fetchUserData();
+};
+
+
+export const getRecommendations = async (payload: any) => {
   try {
-    const response = await apiClient.get('/user-data');
-    console.log('Retrieved user data:', response.data);
+    const response = await apiClient.post('/recommendations/generate', payload);
+    console.log('apiClient: Recommendations received:', JSON.stringify(response.data, null, 2));
     return response.data;
-  } catch (error: any) {
-    console.error("Error fetching user data:", error.message);
-    return null; // Return null if there's an error
+  } catch (error) {
+    console.error('Error fetching recommendations:', error);
+    throw error;
   }
 };
 
+export const recommendPlan = async (data: any) => {
+  try {
+    const response = await apiClient.post('/recommend', data);
+    return response.data;
+  } catch (error) {
+    throw new Error("Error getting recommendation");
+  }
+};
 
 // Function for calculating costs
 export const calculateCosts = async (payload: any) => {
@@ -109,6 +115,10 @@ export const calculateCosts = async (payload: any) => {
     throw error;
   }
 };
+
+// Alias for compatibility with existing code
+export const calculateCost = calculateCosts;
+
 
 export default apiClient;
 

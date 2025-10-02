@@ -1,15 +1,16 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import health_plans, calculate, recommend
-from routers.calculate import router as calculate_router
+from .routers import health_plans, calculate, recommend
+from .routers.recommendation import router as recommendation_router
 
 app = FastAPI()
 
 # Routers
 app.include_router(health_plans.router, prefix="/api/health-plans", tags=["Health Plans"])
-app.include_router(calculate.router, prefix="/api/calculate", tags=["Calculate"])
-app.include_router(recommend.router, prefix="/api/recommend", tags=["Recommend"])
-app.include_router(calculate_router, prefix="/api")
+app.include_router(calculate.router, prefix="/api", tags=["Calculate"])
+app.include_router(recommend.router, prefix="/api", tags=["Recommend"])
+app.include_router(recommendation_router, prefix="/api/recommendations", tags=["Recommendations"])
+
 
 # Test route to check application health
 @app.get("/ping")

@@ -1,6 +1,14 @@
-npm start
-python -m uvicorn main:app --host 127.0.0.1 --port 8001 --reload
+*start venv: C:\Users\JVanD\Projects\Process_Gap\Scripts\activate.bat
+*CD into folder that contains main.py: cd C:\Users\JVanD\Projects\Process_Gap\core
+*start uvicorn: python -m uvicorn main:app --host 127.0.0.1 --port 8001 --reload
+*make new command prompt terminal
+*cd to react folder: cd C:\Users\JVanD\Projects\Process_Gap\core\ui\process-gap-ui
+*start react: npm start 
 
+I am building an app to help model human systems and understand risk within those systems. In this app though I am having issues with the docker servers shutting down frequently and the app generaly being unstable with saves/edits. Can you look through the code and try to fix these issues?
+
+Information can be found here:
+C:\Users\JVanD\Projects\Process_Gap\CODEBASE_DOCUMENTATION.md
  
 
 Demographic & Geographic Data:
@@ -53,4 +61,3 @@ Primary Care,Specialist,Emergency Care,Urgent Care,Accidental Injury,Inpatient A
 interface ChartProps {
   data: { x: string; y: number; label: string }[];
 }
-

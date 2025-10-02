@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { calculateCost } from '../api/apiClient';
 import { saveUserData, submitData, fetchUserData } from '../api/apiClient'; // Ensure correct path
+import { useNavigation } from '../contexts/NavigationContext';
 import {
   Box,
   Grid,
@@ -11,6 +12,8 @@ import {
 } from '@mui/material';
 
 const DataInput: React.FC = () => {
+  const { navigateToTab } = useNavigation();
+  
   // Options for medical needs
   const medicalNeeds = [
     'Primary Care',
@@ -64,7 +67,23 @@ const DataInput: React.FC = () => {
       try {
         const savedData = await fetchUserData();
         if (savedData) {
-          setUserData(savedData.userData || {});
+          // Merge fetched data with default state to prevent undefined errors
+          setUserData(prevData => ({
+            ...prevData,
+            ...(savedData.userData || {}),
+            hsa: {
+              ...prevData.hsa,
+              ...(savedData.userData?.hsa || {}),
+            },
+            fsa: {
+              ...prevData.fsa,
+              ...(savedData.userData?.fsa || {}),
+            },
+            medicare: {
+              ...prevData.medicare,
+              ...(savedData.userData?.medicare || {}),
+            },
+          }));
           setInputDetails(savedData.inputDetails || {});
           setSelectedNeeds(Object.keys(savedData.inputDetails || {}));
         }
@@ -305,7 +324,13 @@ const DataInput: React.FC = () => {
         options={medicalNeeds}
         value={selectedNeeds}
         onChange={(event, newValue) => {
-          setSelectedNeeds(newValue);
+          // Find newly added items
+          const newItems = newValue.filter(item => !selectedNeeds.includes(item));
+          
+          // Put new items at the beginning of the list
+          const reorderedNeeds = [...newItems, ...selectedNeeds.filter(item => newValue.includes(item))];
+          
+          setSelectedNeeds(reorderedNeeds);
           newValue.forEach((need) => handleAddNeed(need));
         }}
         renderInput={(params) => (
@@ -347,14 +372,38 @@ const DataInput: React.FC = () => {
           </Box>
         ))}
 
-        <Button
-          variant="contained"
-          color="primary"
-          //onClick={() => console.log('Submitted Data:', { userData, inputDetails })} //Use for debug
-          onClick={handleSubmit}
-        >
-          Save & Submit
-        </Button>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mt={3}>
+          <Box>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSubmit}
+              size="large"
+            >
+              Save & Submit Data
+            </Button>
+          </Box>
+          
+          <Box display="flex" gap={2}>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => navigateToTab(1)}
+              size="large"
+            >
+              Compare Plans →
+            </Button>
+            
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={() => navigateToTab(2)}
+              size="large"
+            >
+              Get Recommendations →
+            </Button>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

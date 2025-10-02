@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from typing import Dict, Any
-from services.recommendation_engine import score_plans
-from models import InputDetails
+from ..models import InputDetails
 
 router = APIRouter()
 def recommend_plan(input_details: InputDetails):
@@ -25,20 +24,6 @@ def recommend_plan(input_details: InputDetails):
     }
 
 
-# @router.post("/")
-# def recommend_plan(user_input: UserInput):
-#     try:
-#         # Extract plan costs and user preferences
-#         plan_costs = user_input.get("plan_costs")
-#         user_preferences = user_input.get("preferences", {})
-
-#         if not plan_costs:
-#             raise ValueError("Plan costs are required in the input.")
-
-#         # Generate ranked recommendations
-#         ranked_plans = score_plans(plan_costs, user_preferences)
-#         return {"status": "success", "data": ranked_plans}
-#     except ValueError as e:
-#         raise HTTPException(status_code=400, detail=str(e))
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail="An error occurred during recommendation.")
+@router.post("/")
+def recommend_plan_endpoint(input_details: InputDetails):
+    return recommend_plan(input_details)
