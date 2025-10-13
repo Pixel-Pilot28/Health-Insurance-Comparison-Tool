@@ -9,6 +9,7 @@ h11==0.14.0
 idna==3.10
 marshmallow==3.23.1
 numpy==2.2.1
+openpyxl==3.1.5
 packaging==24.2
 pandas==2.2.3
 pydantic==2.10.3
