@@ -58,6 +58,119 @@ def calculate_hsa_growth(hsa_contribution: float, hsa_pass_through: float,
     return round(total_growth, 2)
     
 
+def map_service_to_column_base(service_name: str) -> str:
+    """
+    Map a service name from user input to the corresponding column base name in parsed data.
+    
+    Args:
+        service_name: Service name from user input (e.g., "PrimaryCareVisit")
+    
+    Returns:
+        Column base name (e.g., "Primary_Care_Office_Visit")
+    
+    Note: This mapping should match the actual column names in the parsed CSV.
+    You may need to adjust these mappings based on your actual OPM file column names.
+    """
+    # Define mapping from service names to column bases
+    # These should be updated based on actual parsed column names
+    service_mapping = {
+        'PrimaryCareVisit': 'Primary_Care_Office_Visit',
+        'SpecialistVisit': 'Specialist_Visit',
+        'EmergencyRoomVisit': 'Emergency_Room',
+        'UrgentCareVisit': 'Urgent_Care',
+        'InpatientHospitalStay': 'Inpatient_Hospital',
+        'OutpatientSurgery': 'Outpatient_Surgery',
+        'PreventiveCare': 'Preventive_Care',
+        'LabWork': 'Laboratory_Services',
+        'XRay': 'X_Ray',
+        'MRI': 'MRI_CT_PET',
+        'PhysicalTherapy': 'Physical_Therapy',
+        'MentalHealthVisit': 'Mental_Health_Visit',
+        'PrescriptionGeneric': 'Prescription_Drug_Generic',
+        'PrescriptionBrand': 'Prescription_Drug_Brand',
+    }
+    
+    return service_mapping.get(service_name, service_name)
+
+
+def compute_cost_for_service(plan_row: Dict[str, Any], service_col_base: str, 
+                            allowed_charge: float) -> Tuple[float, Dict[str, Any]]:
+    """
+    Compute the cost for a specific service using parsed fields with deterministic priority.
+    
+    Priority order:
+    1. money field (direct copay)
+    2. percent field (coinsurance)
+    3. raw field interpretation (covered, not covered, etc.)
+    
+    Args:
+        plan_row: Dictionary containing plan data with parsed fields
+        service_col_base: Base column name (e.g., "Primary_Care_Office_Visit")
+        allowed_charge: The allowed/average charge for the service
+    
+    Returns:
+        Tuple of (cost, metadata_dict)
+        - cost: Member cost for the service (None if special handling needed)
+        - metadata: Dict with flags and parsing info
+    """
+    money = plan_row.get(f"{service_col_base}_money")
+    pct = plan_row.get(f"{service_col_base}_percent")
+    raw = plan_row.get(f"{service_col_base}_raw")
+    
+    # Get special condition flags
+    applies_after_deductible = plan_row.get(f"{service_col_base}_applies_after_deductible", False)
+    first_visit_only = plan_row.get(f"{service_col_base}_first_visit_only", False)
+    network_only = plan_row.get(f"{service_col_base}_network_only", False)
+    prior_auth = plan_row.get(f"{service_col_base}_prior_authorization", False)
+    
+    metadata = {
+        'applies_after_deductible': applies_after_deductible,
+        'first_visit_only': first_visit_only,
+        'network_only': network_only,
+        'prior_authorization': prior_auth,
+        'raw': raw,
+        'cost_type': None  # Will be set to 'copay', 'coinsurance', 'covered', 'not_covered', or 'needs_review'
+    }
+    
+    # Priority 1: Money field (direct copay)
+    if money is not None:
+        metadata['cost_type'] = 'copay'
+        return float(money), metadata
+    
+    # Priority 2: Percent field (coinsurance)
+    if pct is not None:
+        metadata['cost_type'] = 'coinsurance'
+        return (float(pct) / 100.0) * allowed_charge, metadata
+    
+    # Priority 3: Raw field interpretation
+    if raw:
+        lr = raw.lower().strip()
+        
+        # Check for "not covered" first (before "covered")
+        if any(phrase in lr for phrase in ['not covered', 'excluded', 'not applicable']):
+            metadata['cost_type'] = 'not_covered'
+            return float('inf'), metadata
+        
+        # After deductible - needs special handling (before "covered" check)
+        if 'after deductible' in lr and not money and not pct:
+            metadata['cost_type'] = 'needs_review'
+            return None, metadata
+        
+        # Fully covered
+        if any(phrase in lr for phrase in ['covered', 'in-network', 'in network', '100%']):
+            metadata['cost_type'] = 'covered'
+            return 0.0, metadata
+        
+        # N/A
+        if 'n/a' in lr or 'na' == lr:
+            metadata['cost_type'] = 'not_covered'
+            return float('inf'), metadata
+    
+    # Default: Unknown/needs manual review
+    metadata['cost_type'] = 'needs_review'
+    return None, metadata
+
+
 def calculate_service_cost(service_cost: float, frequency: int, coverage: Dict[str, Any],
                            deductible_remaining: float, oop_remaining: float) -> Tuple[float, float, float, Dict[str, float]]:
     """
@@ -192,11 +305,32 @@ def calculate_costs(user_input: Dict[str, Any], user_data: Dict[str, Any], tax_r
                     # Get average service cost
                     service_cost_value = float(service_costs.get(service, 0.0))
                     
-                    # Retrieve member cost from plan_details['services']
-                    raw_services = plan_details.get('services', {})
-                    if not isinstance(raw_services, dict):
-                        raw_services = {}
-                    member_cost_from_plan = raw_services.get(service, 0.0)  # This is the member copay (like $0.15)
+                    # Map service name to parsed column base
+                    service_col_base = map_service_to_column_base(service)
+                    
+                    # Try to use parsed fields first, fallback to legacy 'services' dict
+                    member_cost, metadata = compute_cost_for_service(
+                        plan_details, 
+                        service_col_base, 
+                        service_cost_value
+                    )
+                    
+                    # Fallback to legacy services dict if parsing returns None
+                    if member_cost is None:
+                        raw_services = plan_details.get('services', {})
+                        if not isinstance(raw_services, dict):
+                            raw_services = {}
+                        member_cost_from_plan = raw_services.get(service, 0.0)
+                        # Use legacy logic
+                        if isinstance(member_cost_from_plan, (int, float)):
+                            member_cost = float(member_cost_from_plan)
+                        else:
+                            member_cost = 0.0
+                        metadata = {
+                            'cost_type': 'legacy',
+                            'applies_after_deductible': False,
+                            'raw': str(member_cost_from_plan)
+                        }
 
                     # Group services by month
                     for date in details.get('dates', []):
@@ -205,26 +339,69 @@ def calculate_costs(user_input: Dict[str, Any], user_data: Dict[str, Any], tax_r
                             monthly_services[month].append({
                                 'service': service,
                                 'date': date,
-                                'avg_cost': service_cost_value,  # Average service cost (not used in calculation)
-                                'member_cost': member_cost_from_plan  # Member cost from plan (this is what we use)
+                                'avg_cost': service_cost_value,
+                                'member_cost': member_cost,
+                                'metadata': metadata
                             })
                         except Exception as e:
                             print(f"Error parsing date '{date}' for service {service}: {e}")
                             continue
 
-                # Process each month in order, using direct service costs from plan data
+                # Process each month in order, using parsed fields with priority logic
                 cumulative_medical_cost = 0.0
                 for month in range(1, 13):
                     monthly_service_cost = 0.0
                     
                     # Process all services for this month
                     for service_info in monthly_services[month]:
-                        # Get the member cost from the plan data and the service cost
                         member_cost = service_info['member_cost']
                         avg_service_cost = service_info['avg_cost']
+                        metadata = service_info.get('metadata', {})
+                        cost_type = metadata.get('cost_type', 'unknown')
                         
-                        # Handle different cost formats from the CSV
-                        if isinstance(member_cost, (int, float)):
+                        # Handle service not covered
+                        if member_cost == float('inf'):
+                            # Service not covered - skip or handle specially
+                            print(f"Service {service_info['service']} not covered in plan {plan_id}")
+                            continue
+                        
+                        # Determine if deductible applies
+                        deductible_applies = metadata.get('applies_after_deductible', False)
+                        
+                        # Calculate member pays based on cost type
+                        if cost_type == 'copay':
+                            # Fixed copay - typically doesn't apply to deductible unless flagged
+                            if deductible_applies and deductible_remaining > 0:
+                                # Apply deductible first
+                                deductible_applied = min(avg_service_cost, deductible_remaining)
+                                member_pays = deductible_applied
+                                deductible_remaining -= deductible_applied
+                                # After deductible, apply copay
+                                if deductible_remaining == 0 and avg_service_cost > deductible_applied:
+                                    member_pays = member_cost
+                            else:
+                                # Direct copay, no deductible
+                                member_pays = member_cost
+                                
+                        elif cost_type == 'coinsurance':
+                            # Coinsurance - calculated as percentage of allowed charge
+                            # This was already calculated in compute_cost_for_service
+                            member_pays = member_cost
+                            
+                            # Apply deductible logic for coinsurance
+                            if deductible_remaining > 0:
+                                # If deductible not met, member pays full service cost until deductible is met
+                                deductible_applied = min(avg_service_cost, deductible_remaining)
+                                # Member pays deductible portion + coinsurance on remainder
+                                member_pays = deductible_applied + (avg_service_cost - deductible_applied) * (member_cost / avg_service_cost)
+                                deductible_remaining -= deductible_applied
+                                
+                        elif cost_type == 'covered':
+                            # Fully covered - member pays nothing
+                            member_pays = 0.0
+                            
+                        elif cost_type == 'legacy':
+                            # Legacy calculation (backward compatibility)
                             member_cost_float = float(member_cost)
                             
                             # Determine if this is a percentage (coinsurance) or fixed copay
@@ -234,20 +411,16 @@ def calculate_costs(user_input: Dict[str, Any], user_data: Dict[str, Any], tax_r
                                 
                                 # Apply deductible logic for coinsurance
                                 if deductible_remaining > 0:
-                                    # If deductible not met, member pays full service cost until deductible is met
                                     deductible_applied = min(avg_service_cost, deductible_remaining)
                                     member_pays = deductible_applied + (avg_service_cost - deductible_applied) * member_cost_float
                                     deductible_remaining -= deductible_applied
-                                else:
-                                    # Deductible met, member pays coinsurance only
-                                    member_pays = avg_service_cost * member_cost_float
                             else:
-                                # This is a fixed copay (e.g., $25, $30)
+                                # Fixed copay
                                 member_pays = member_cost_float
-                                # Fixed copays typically don't apply to deductible
                         else:
-                            # Handle string values or complex cost structures
+                            # Unknown or needs review - use 0 for now
                             member_pays = 0.0
+                            print(f"Warning: Cost type '{cost_type}' needs manual review for service {service_info['service']}")
                         
                         # Apply out-of-pocket maximum
                         if oop_remaining > 0:
