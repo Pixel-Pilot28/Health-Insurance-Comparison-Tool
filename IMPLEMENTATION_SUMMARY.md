@@ -88,6 +88,14 @@ backend/
 4. **fix: Add fallback imports for parser router** (206b0d3)
    - Fixed import compatibility issues
 
+5. **docs: Add comprehensive implementation summary** (39a2f24)
+   - Detailed overview and usage guide
+
+6. **feat: Update cost calculator to use parsed money/percent fields** (48819a3)
+   - Deterministic priority system for cost computation
+   - 15 new unit tests for cost calculation
+   - Full backward compatibility maintained
+
 ## Usage
 
 ### Parse New OPM Files
@@ -137,14 +145,30 @@ Plus special fields for deductibles:
 - `openpyxl==3.1.5` - Excel file reading
 - `pytest==8.4.2` - Testing framework
 
+## Cost Calculator Integration ✅
+
+**Status:** COMPLETED
+
+1. **Updated Cost Calculator** (`services/cost_calculator.py`)
+   - Added `compute_cost_for_service()` with deterministic priority:
+     1. Money field (direct copay)
+     2. Percent field (coinsurance)  
+     3. Raw field interpretation (covered, not covered, etc.)
+   - Added `map_service_to_column_base()` for service name mapping
+   - Updated service processing to use parsed fields with metadata
+   - Enhanced deductible logic based on `applies_after_deductible` flag
+   - Added support for special condition flags (network_only, prior_auth, etc.)
+   - Maintains backward compatibility with legacy 'services' dict
+   - 15 unit tests - all passing ✅
+
 ## Next Steps for Full Integration
 
 ### Phase 2 (Future Work)
 
-1. **Update Cost Calculator**
-   - Modify `services/cost_calculator.py` to use `*_money` and `*_percent` fields
-   - Implement flag-aware calculations (deductible, prior auth, network)
-   - Add tests for new calculation logic
+1. **Service Column Mapping** ⚠️
+   - The `map_service_to_column_base()` function contains placeholder mappings
+   - These need to be updated to match actual OPM column names
+   - Review parsed CSV column names and adjust mapping dictionary
 
 2. **UI Parser Checker**
    - Create Material-UI component to display parse report
@@ -165,7 +189,9 @@ Plus special fields for deductibles:
 
 ## Testing Results
 
-### Unit Tests: ✅ All 41 passing
+### Unit Tests: ✅ All 56 passing
+
+**Parser Tests** (41 tests)
 - Money/percent extraction: 8 tests
 - Flag detection: 7 tests  
 - Deductible parsing: 4 tests
@@ -174,6 +200,11 @@ Plus special fields for deductibles:
 - Safe float conversion: 6 tests
 - Column normalization: 5 tests
 - Ambiguity detection: 4 tests
+
+**Cost Calculator Tests** (15 tests)
+- Service name mapping: 3 tests
+- Cost computation priority: 12 tests
+- Edge case handling (covered, not covered, needs review)
 
 ### Parser Execution: ✅ Successful
 - Parsed 2026 FEHB files
@@ -200,17 +231,19 @@ Plus special fields for deductibles:
 **Branch:** `feature/opm-excel-parser`  
 **Status:** Ready for review  
 **Base:** `main`  
-**Commits:** 4  
-**Files Changed:** 12 files, ~1500 lines added  
+**Commits:** 6  
+**Files Changed:** 14 files, ~2000 lines added  
 
 ## Merge Readiness
 
-- ✅ All tests passing
+- ✅ All tests passing (56 total)
 - ✅ Documentation complete
 - ✅ No breaking changes to existing code
 - ✅ New feature is opt-in (user must run parser)
 - ✅ API endpoints defined and integrated
-- ⚠️ Cost calculator integration deferred to Phase 2
+- ✅ Cost calculator updated to use parsed fields
+- ✅ Backward compatibility maintained
+- ⚠️ Service column mappings need verification against actual OPM column names
 - ⚠️ UI component deferred to Phase 2
 
 ## How to Test
