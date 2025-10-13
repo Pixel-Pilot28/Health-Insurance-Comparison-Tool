@@ -95,7 +95,9 @@ def calculate_cost(payload: Payload):
 
         # Convert InputDetails to a dictionary
         input_details_dict = {key: value.dict() for key, value in input_details.items()}
-        # print("Converted Input Details:", input_details_dict)
+        print("=== CALCULATE ENDPOINT ===", flush=True)
+        print(f"Converted Input Details: {list(input_details_dict.keys())}", flush=True)
+        print(f"Number of services: {len(input_details_dict)}", flush=True)
 
         # Convert string values to numbers and tax rate to decimal
         tax_rate = float(user_data["taxRate"]) / 100

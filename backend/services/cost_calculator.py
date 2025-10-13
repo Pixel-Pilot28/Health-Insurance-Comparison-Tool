@@ -482,11 +482,17 @@ def calculate_costs(user_input: Dict[str, Any], user_data: Dict[str, Any], tax_r
                 # Group services by month for processing
                 monthly_services = {month: [] for month in range(1, 13)}
                 
+                # Debug: Log user input structure
+                print(f"DEBUG: Processing plan {plan_id}, user_input keys: {list(user_input.keys())}", flush=True)
+                
                 # Process each service from user input (input_details)
                 for service, details in user_input.items():
                     # user_input now only contains service details, no need to skip other fields
                     if not isinstance(details, dict) or 'dates' not in details:
+                        print(f"DEBUG: Skipping {service} - not a dict or no dates", flush=True)
                         continue
+                    
+                    print(f"DEBUG: Processing service {service} with {len(details.get('dates', []))} dates", flush=True)
 
                     # Get average service cost
                     service_cost_value = float(service_costs.get(service, 0.0))
@@ -554,17 +560,21 @@ def calculate_costs(user_input: Dict[str, Any], user_data: Dict[str, Any], tax_r
                         
                         # Handle special cases
                         if member_pays is None:
-                            # Needs manual review - fallback to legacy logic
-                            print(f"Warning: Service {service_name} needs manual review for plan {plan_id}")
-                            # Try legacy method
-                            legacy_cost, legacy_metadata = compute_cost_for_service(
-                                plan_details, 
-                                service_col_base, 
-                                avg_service_cost
-                            )
-                            if legacy_cost is not None and legacy_cost != float('inf'):
-                                member_pays = legacy_cost
+                            # Needs manual review - fallback to legacy services dict
+                            print(f"Warning: Service {service_name} needs manual review for plan {plan_id}, using legacy services dict")
+                            # Use the services dict directly
+                            services_dict = plan_details.get('services', {})
+                            if service_name in services_dict:
+                                service_value = services_dict[service_name]
+                                if isinstance(service_value, (int, float)):
+                                    # It's a coinsurance percentage
+                                    member_pays = float(service_value) * avg_service_cost
+                                    print(f"  Legacy: {service_name} = {service_value} * {avg_service_cost} = ${member_pays:.2f}")
+                                else:
+                                    print(f"  Legacy: {service_name} has non-numeric value: {service_value}")
+                                    member_pays = 0.0
                             else:
+                                print(f"  Legacy: {service_name} not found in services dict")
                                 member_pays = 0.0
                         
                         elif member_pays == float('inf'):
