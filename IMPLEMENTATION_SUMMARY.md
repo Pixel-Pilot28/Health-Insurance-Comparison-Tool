@@ -69,7 +69,7 @@ backend/
 └── main.py                        # Updated router registration
 ```
 
-## Git Commits
+## Git Commits (8 total)
 
 1. **feat: Add OPM Excel parser with helper functions** (18af8c0)
    - Created parse_opm.py and parse_helpers.py
@@ -87,6 +87,21 @@ backend/
 
 4. **fix: Add fallback imports for parser router** (206b0d3)
    - Fixed import compatibility issues
+
+5. **feat: Integrate parsed fields into cost calculator** (48819a3)
+   - Added compute_cost_for_service() with priority system
+   - 15 cost calculator unit tests (all passing)
+
+6. **feat: Enhance cost calculator flag handling** (c5edbb9)
+   - Improved applies_after_deductible logic with deductible-first processing
+   - Added support for prior_authorization, network_only, first_visit_only flags
+
+7. **docs: Update implementation summary with cost calculator integration** (d6c55b5)
+   - Documented all phases and testing results
+
+8. **feat: Update service mappings with actual OPM column names** (0672447)
+   - Verified column names from parsed CSV
+   - Mapped all 24 service types to actual OPM columns
 
 5. **docs: Add comprehensive implementation summary** (39a2f24)
    - Detailed overview and usage guide
@@ -161,14 +176,28 @@ Plus special fields for deductibles:
    - Maintains backward compatibility with legacy 'services' dict
    - 15 unit tests - all passing ✅
 
+## Service-to-Column Mapping Update ✅
+
+**Status:** COMPLETED (8th commit)
+
+Updated `map_service_to_column_base()` with actual OPM column names:
+- Verified column names from `health_plan_info_parsed.csv`
+- Mapped all 24 service types from `service_costs.json` to actual OPM columns
+- Examples:
+  - `'Primary Care'` → `'Primary_Care_Office_Visit'`
+  - `'Specialist'` → `'Specialist_Office_Visit'`
+  - `'Medications Tier 0'` → `'Tier_0'`
+  - `'ABA'` → `'Applied_Behavioral_Analysis_(ABA)'`
+  - `'Maternity Care'` → `'Prenatal_Care,_Screening_for_Gestational_Diabetes,_Delivery,_and_Postpartum_Care_(Maternity_Care)'`
+
 ## Next Steps for Full Integration
 
 ### Phase 2 (Future Work)
 
-1. **Service Column Mapping** ⚠️
-   - The `map_service_to_column_base()` function contains placeholder mappings
-   - These need to be updated to match actual OPM column names
-   - Review parsed CSV column names and adjust mapping dictionary
+1. **Integration Testing**
+   - Test full cost calculation flow with real parsed data
+   - Verify service lookups work with actual OPM columns
+   - Validate flag handling in production scenarios
 
 2. **UI Parser Checker**
    - Create Material-UI component to display parse report
@@ -241,9 +270,10 @@ Plus special fields for deductibles:
 - ✅ No breaking changes to existing code
 - ✅ New feature is opt-in (user must run parser)
 - ✅ API endpoints defined and integrated
-- ✅ Cost calculator updated to use parsed fields
+- ✅ Cost calculator updated to use parsed fields with priority system
+- ✅ Service-to-column mappings verified against actual OPM data
+- ✅ Special flag handling (applies_after_deductible, prior_authorization, etc.)
 - ✅ Backward compatibility maintained
-- ⚠️ Service column mappings need verification against actual OPM column names
 - ⚠️ UI component deferred to Phase 2
 
 ## How to Test
