@@ -121,10 +121,168 @@ def map_service_to_column_base(service_name: str) -> str:
     return service_mapping.get(service_name, service_name)
 
 
+def compute_patient_cost(plan_row: Dict[str, Any], service_col_base: str, 
+                        allowed_charge: float, deductible_remaining: float) -> Tuple[float, float, Dict[str, Any]]:
+    """
+    Enhanced cost computation that handles copay-then-coinsurance rules and all parsed benefit fields.
+    
+    This function implements the complete benefit structure parsing including:
+    - Primary copay and/or coinsurance
+    - Secondary (follow-on) copay/coinsurance ("then" rules)
+    - Caps (maximum member responsibility)
+    - Deductible application
+    - Min/max ranges
+    - Coverage status flags
+    
+    Args:
+        plan_row: Dictionary containing plan data with parsed fields
+        service_col_base: Base column name (e.g., "Primary_Care_Office_Visit")
+        allowed_charge: The allowed/average charge for the service
+        deductible_remaining: Current remaining deductible amount
+    
+    Returns:
+        Tuple of (member_cost, updated_deductible_remaining, metadata_dict)
+        - member_cost: Total cost to member for this service
+        - updated_deductible_remaining: Deductible remaining after this service
+        - metadata: Dict with all extracted benefit details and flags
+    """
+    # Extract all possible parsed fields
+    primary_copay = plan_row.get(f"{service_col_base}_money")
+    primary_coinsurance = plan_row.get(f"{service_col_base}_percent")
+    
+    # Secondary/follow-on values (for "then" rules like "$25 then 20%")
+    secondary_copay = plan_row.get(f"{service_col_base}_secondary_copay")
+    secondary_coinsurance = plan_row.get(f"{service_col_base}_secondary_coinsurance")
+    
+    # Caps and ranges
+    cap = plan_row.get(f"{service_col_base}_cap")
+    min_value = plan_row.get(f"{service_col_base}_min_value")
+    max_value = plan_row.get(f"{service_col_base}_max_value")
+    
+    # Flags
+    applies_after_deductible = plan_row.get(f"{service_col_base}_applies_after_deductible", False)
+    first_visit_only = plan_row.get(f"{service_col_base}_first_visit_only", False)
+    network_only = plan_row.get(f"{service_col_base}_network_only", False)
+    prior_auth = plan_row.get(f"{service_col_base}_prior_authorization", False)
+    is_covered = plan_row.get(f"{service_col_base}_is_covered")
+    visits_limit = plan_row.get(f"{service_col_base}_visits_limit")
+    
+    raw = plan_row.get(f"{service_col_base}_raw", "")
+    
+    # Build metadata
+    metadata = {
+        'applies_after_deductible': applies_after_deductible,
+        'first_visit_only': first_visit_only,
+        'network_only': network_only,
+        'prior_authorization': prior_auth,
+        'is_covered': is_covered,
+        'visits_limit': visits_limit,
+        'has_cap': cap is not None,
+        'has_secondary_rule': secondary_copay is not None or secondary_coinsurance is not None,
+        'raw': raw,
+        'cost_type': None
+    }
+    
+    # Check coverage status first
+    if is_covered is False:
+        metadata['cost_type'] = 'not_covered'
+        return float('inf'), deductible_remaining, metadata
+    
+    if is_covered is True and primary_copay is None and primary_coinsurance is None:
+        # Fully covered with no cost sharing
+        metadata['cost_type'] = 'covered'
+        return 0.0, deductible_remaining, metadata
+    
+    # Initialize cost calculation
+    total_patient_cost = 0.0
+    remaining_charge = allowed_charge
+    original_deductible = deductible_remaining
+    
+    # Step 1: Apply deductible if required
+    if applies_after_deductible and deductible_remaining > 0:
+        deductible_applied = min(remaining_charge, deductible_remaining)
+        total_patient_cost += deductible_applied
+        remaining_charge -= deductible_applied
+        deductible_remaining -= deductible_applied
+        metadata['deductible_applied'] = deductible_applied
+    
+    # Step 2: Apply primary cost sharing
+    if primary_copay is not None:
+        # Primary copay exists
+        copay_amount = float(primary_copay)
+        total_patient_cost += copay_amount
+        remaining_charge = max(0.0, remaining_charge - copay_amount)
+        metadata['cost_type'] = 'copay_primary'
+        
+        # Step 3: Check for secondary rule (copay-then-coinsurance)
+        if secondary_coinsurance is not None and remaining_charge > 0:
+            # Apply coinsurance to remaining charge after copay
+            coinsurance_amount = (float(secondary_coinsurance) / 100.0) * remaining_charge
+            total_patient_cost += coinsurance_amount
+            metadata['cost_type'] = 'copay_then_coinsurance'
+            metadata['secondary_amount'] = coinsurance_amount
+        elif secondary_copay is not None:
+            # Apply secondary copay (rare but possible)
+            total_patient_cost += float(secondary_copay)
+            metadata['cost_type'] = 'copay_then_copay'
+            metadata['secondary_amount'] = float(secondary_copay)
+    
+    elif primary_coinsurance is not None:
+        # Primary coinsurance (no copay)
+        if remaining_charge > 0:
+            coinsurance_amount = (float(primary_coinsurance) / 100.0) * remaining_charge
+            total_patient_cost += coinsurance_amount
+            metadata['cost_type'] = 'coinsurance_primary'
+        
+        # Check for secondary copay after coinsurance (unusual but possible)
+        if secondary_copay is not None:
+            total_patient_cost += float(secondary_copay)
+            metadata['cost_type'] = 'coinsurance_then_copay'
+            metadata['secondary_amount'] = float(secondary_copay)
+    
+    # Step 4: Handle ranges (min/max)
+    if min_value is not None and max_value is not None:
+        # Cost is within a range - use average or apply logic
+        total_patient_cost = max(float(min_value), min(total_patient_cost, float(max_value)))
+        metadata['cost_type'] = 'range'
+        metadata['range_min'] = float(min_value)
+        metadata['range_max'] = float(max_value)
+    
+    # Step 5: Apply cap (maximum member responsibility)
+    if cap is not None:
+        cap_value = float(cap)
+        if total_patient_cost > cap_value:
+            total_patient_cost = cap_value
+            metadata['cap_applied'] = True
+    
+    # Fallback: If no cost sharing rules found, check raw field
+    if metadata['cost_type'] is None:
+        if raw:
+            lr = raw.lower().strip()
+            
+            # Check for special strings
+            if any(phrase in lr for phrase in ['not covered', 'excluded', 'not applicable']):
+                metadata['cost_type'] = 'not_covered'
+                return float('inf'), original_deductible, metadata
+            
+            if any(phrase in lr for phrase in ['no charge', 'covered in full', '100%']):
+                metadata['cost_type'] = 'covered'
+                return 0.0, deductible_remaining, metadata
+        
+        # No rules found - needs review
+        metadata['cost_type'] = 'needs_review'
+        return None, original_deductible, metadata
+    
+    return round(total_patient_cost, 2), deductible_remaining, metadata
+
+
 def compute_cost_for_service(plan_row: Dict[str, Any], service_col_base: str, 
                             allowed_charge: float) -> Tuple[float, Dict[str, Any]]:
     """
-    Compute the cost for a specific service using parsed fields with deterministic priority.
+    LEGACY: Compute the cost for a specific service using parsed fields with deterministic priority.
+    
+    NOTE: This function is kept for backward compatibility but should be replaced with
+    compute_patient_cost() which handles more complex benefit structures.
     
     Priority order:
     1. money field (direct copay)
@@ -375,100 +533,54 @@ def calculate_costs(user_input: Dict[str, Any], user_data: Dict[str, Any], tax_r
                             print(f"Error parsing date '{date}' for service {service}: {e}")
                             continue
 
-                # Process each month in order, using parsed fields with priority logic
+                # Process each month in order, using enhanced compute_patient_cost function
                 cumulative_medical_cost = 0.0
                 for month in range(1, 13):
                     monthly_service_cost = 0.0
                     
                     # Process all services for this month
                     for service_info in monthly_services[month]:
-                        member_cost = service_info['member_cost']
+                        service_name = service_info['service']
                         avg_service_cost = service_info['avg_cost']
-                        metadata = service_info.get('metadata', {})
-                        cost_type = metadata.get('cost_type', 'unknown')
+                        service_col_base = map_service_to_column_base(service_name)
                         
-                        # Handle service not covered
-                        if member_cost == float('inf'):
-                            # Service not covered - skip or handle specially
-                            print(f"Service {service_info['service']} not covered in plan {plan_id}")
+                        # Use enhanced cost computation
+                        member_pays, deductible_remaining, metadata = compute_patient_cost(
+                            plan_details,
+                            service_col_base,
+                            avg_service_cost,
+                            deductible_remaining
+                        )
+                        
+                        # Handle special cases
+                        if member_pays is None:
+                            # Needs manual review - fallback to legacy logic
+                            print(f"Warning: Service {service_name} needs manual review for plan {plan_id}")
+                            # Try legacy method
+                            legacy_cost, legacy_metadata = compute_cost_for_service(
+                                plan_details, 
+                                service_col_base, 
+                                avg_service_cost
+                            )
+                            if legacy_cost is not None and legacy_cost != float('inf'):
+                                member_pays = legacy_cost
+                            else:
+                                member_pays = 0.0
+                        
+                        elif member_pays == float('inf'):
+                            # Service not covered - skip
+                            print(f"Service {service_name} not covered in plan {plan_id}")
                             continue
                         
-                        # Check special condition flags
-                        deductible_applies = metadata.get('applies_after_deductible', False)
-                        prior_auth_required = metadata.get('prior_authorization', False)
-                        network_only = metadata.get('network_only', False)
-                        first_visit_only = metadata.get('first_visit_only', False)
+                        # Check for special flags and log warnings
+                        if metadata.get('prior_authorization', False):
+                            print(f"Note: Service {service_name} requires prior authorization for plan {plan_id}")
                         
-                        # Handle prior authorization flag
-                        if prior_auth_required:
-                            # Log for UI warning - for now, proceed with normal calculation
-                            # In future, this could set a flag in results for UI to display
-                            print(f"Note: Service {service_info['service']} requires prior authorization for plan {plan_id}")
+                        if metadata.get('first_visit_only', False):
+                            print(f"Note: Service {service_name} benefit applies to first visit only for plan {plan_id}")
                         
-                        # Handle network-only services
-                        # Assumption: if network_only is True, we assume user is in-network
-                        # In future, could add user input for in/out of network
-                        
-                        # Calculate member pays based on cost type and deductible logic
-                        if cost_type == 'copay':
-                            # Fixed copay
-                            if deductible_applies and deductible_remaining > 0:
-                                # Special case: "applies after deductible" means:
-                                # 1. Member pays full service cost until deductible is met
-                                # 2. Then the copay applies
-                                deductible_applied = min(avg_service_cost, deductible_remaining)
-                                deductible_remaining -= deductible_applied
-                                
-                                if deductible_applied >= avg_service_cost:
-                                    # Entire service cost goes to deductible
-                                    member_pays = deductible_applied
-                                else:
-                                    # Deductible met during this service, apply copay
-                                    member_pays = deductible_applied + member_cost
-                            else:
-                                # Deductible already met or doesn't apply - just copay
-                                member_pays = member_cost
-                                
-                        elif cost_type == 'coinsurance':
-                            # Coinsurance - always applies deductible first if not met
-                            if deductible_remaining > 0:
-                                # Member pays to satisfy deductible first
-                                deductible_applied = min(avg_service_cost, deductible_remaining)
-                                deductible_remaining -= deductible_applied
-                                
-                                # Then apply coinsurance to any remaining allowed charge
-                                remaining_charge = avg_service_cost - deductible_applied
-                                coinsurance_amount = (member_cost / avg_service_cost) * remaining_charge
-                                member_pays = deductible_applied + coinsurance_amount
-                            else:
-                                # Deductible already met - just coinsurance
-                                member_pays = member_cost
-                                
-                        elif cost_type == 'covered':
-                            # Fully covered - member pays nothing
-                            member_pays = 0.0
-                            
-                        elif cost_type == 'legacy':
-                            # Legacy calculation (backward compatibility)
-                            member_cost_float = float(member_cost)
-                            
-                            # Determine if this is a percentage (coinsurance) or fixed copay
-                            if 0 < member_cost_float <= 1.0:
-                                # This is coinsurance (e.g., 0.15 = 15%)
-                                member_pays = avg_service_cost * member_cost_float
-                                
-                                # Apply deductible logic for coinsurance
-                                if deductible_remaining > 0:
-                                    deductible_applied = min(avg_service_cost, deductible_remaining)
-                                    member_pays = deductible_applied + (avg_service_cost - deductible_applied) * member_cost_float
-                                    deductible_remaining -= deductible_applied
-                            else:
-                                # Fixed copay
-                                member_pays = member_cost_float
-                        else:
-                            # Unknown or needs review - use 0 for now
-                            member_pays = 0.0
-                            print(f"Warning: Cost type '{cost_type}' needs manual review for service {service_info['service']}")
+                        if metadata.get('visits_limit'):
+                            print(f"Note: Service {service_name} limited to {metadata['visits_limit']} visits for plan {plan_id}")
                         
                         # Apply out-of-pocket maximum
                         if oop_remaining > 0:
