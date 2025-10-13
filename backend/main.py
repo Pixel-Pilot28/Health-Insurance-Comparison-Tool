@@ -1,7 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import health_plans, calculate, recommend, parser
-from .routers.recommendation import router as recommendation_router
+
+try:
+    from .routers import health_plans, calculate, recommend, parser
+    from .routers.recommendation import router as recommendation_router
+except ImportError:
+    from routers import health_plans, calculate, recommend, parser
+    from routers.recommendation import router as recommendation_router
 
 app = FastAPI()
 
