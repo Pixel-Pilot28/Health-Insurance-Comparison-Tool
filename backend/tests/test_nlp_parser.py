@@ -8,7 +8,13 @@ Tests the parsing of complex benefit strings like:
 """
 
 import pytest
-from backend.scripts.opm_nlp_parser import (
+import sys
+from pathlib import Path
+
+# Add scripts directory to path
+sys.path.insert(0, str(Path(__file__).parent.parent / 'scripts'))
+
+from opm_nlp_parser import (
     ExtendedNLPParser,
     BenefitRule,
     parse_benefit_string,

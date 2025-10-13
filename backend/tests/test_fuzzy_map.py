@@ -6,7 +6,13 @@ to canonical internal field names.
 """
 
 import pytest
-from backend.scripts.opm_fuzzy_map import (
+import sys
+from pathlib import Path
+
+# Add scripts directory to path
+sys.path.insert(0, str(Path(__file__).parent.parent / 'scripts'))
+
+from opm_fuzzy_map import (
     normalize,
     jaccard,
     seq_ratio,
