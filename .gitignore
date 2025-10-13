@@ -49,9 +49,7 @@ public/build/
 
 # JSON & data files
 user_payload.json
-*.csv
 *.docx
-*.xlsx
 *.tsv
 *.json
 !public/*.json  # Allow necessary public JSON files
