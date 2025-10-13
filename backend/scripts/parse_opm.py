@@ -29,19 +29,30 @@ from datetime import datetime
 import pandas as pd
 
 # Import parsing helpers
-from parse_helpers import (
-    parse_money_percent,
-    detect_flags,
-    parse_deductible,
-    parse_coinsurance,
-    parse_specialist_split,
-    safe_float,
-    normalize_column_name,
-    is_ambiguous_cell
-)
-
-# Import fuzzy mapping and NLP parser
 try:
+    from .parse_helpers import (
+        parse_money_percent,
+        detect_flags,
+        parse_deductible,
+        parse_coinsurance,
+        parse_specialist_split,
+        safe_float,
+        normalize_column_name,
+        is_ambiguous_cell
+    )
+    from .opm_fuzzy_map import fuzzy_map_columns, apply_manual_overrides, suggest_mappings
+    from .opm_nlp_parser import ExtendedNLPParser
+except ImportError:
+    from parse_helpers import (
+        parse_money_percent,
+        detect_flags,
+        parse_deductible,
+        parse_coinsurance,
+        parse_specialist_split,
+        safe_float,
+        normalize_column_name,
+        is_ambiguous_cell
+    )
     from opm_fuzzy_map import (
         fuzzy_map_columns,
         apply_manual_overrides,

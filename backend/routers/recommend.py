@@ -1,6 +1,9 @@
 from fastapi import APIRouter, HTTPException
 from typing import Dict, Any
-from ..models import InputDetails
+try:
+    from ..models import InputDetails
+except ImportError:
+    from models import InputDetails
 
 router = APIRouter()
 def recommend_plan(input_details: InputDetails):

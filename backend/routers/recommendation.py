@@ -1,15 +1,26 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Dict, List, Any, Optional
-from ..services.recommendation_engine import (
-    RecommendationEngine, 
-    UserPreferences, 
-    RiskTolerance, 
-    CostSensitivity, 
-    CoveragePriority
-)
-from ..services.cost_calculator import calculate_costs
-from .health_plans import get_parsed_health_plans
+try:
+    from ..services.recommendation_engine import (
+        RecommendationEngine, 
+        UserPreferences, 
+        RiskTolerance, 
+        CostSensitivity, 
+        CoveragePriority
+    )
+    from ..services.cost_calculator import calculate_costs
+    from .health_plans import get_parsed_health_plans
+except ImportError:
+    from services.recommendation_engine import (
+        RecommendationEngine, 
+        UserPreferences, 
+        RiskTolerance, 
+        CostSensitivity, 
+        CoveragePriority
+    )
+    from services.cost_calculator import calculate_costs
+    from routers.health_plans import get_parsed_health_plans
 
 router = APIRouter()
 
