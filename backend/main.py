@@ -2,10 +2,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 try:
-    from .routers import health_plans, calculate, recommend, parser
+    from .routers import health_plans, calculate, recommend, parser, opm
     from .routers.recommendation import router as recommendation_router
 except ImportError:
-    from routers import health_plans, calculate, recommend, parser
+    from routers import health_plans, calculate, recommend, parser, opm
     from routers.recommendation import router as recommendation_router
 
 app = FastAPI()
@@ -16,6 +16,7 @@ app.include_router(calculate.router, prefix="/api", tags=["Calculate"])
 app.include_router(recommend.router, prefix="/api", tags=["Recommend"])
 app.include_router(recommendation_router, prefix="/api/recommendations", tags=["Recommendations"])
 app.include_router(parser.router, tags=["Parser"])
+app.include_router(opm.router, prefix="/api", tags=["OPM Parser"])
 
 
 # Test route to check application health
