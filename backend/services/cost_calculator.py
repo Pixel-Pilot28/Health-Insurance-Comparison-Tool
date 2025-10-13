@@ -68,26 +68,54 @@ def map_service_to_column_base(service_name: str) -> str:
     Returns:
         Column base name (e.g., "Primary_Care_Office_Visit")
     
-    Note: This mapping should match the actual column names in the parsed CSV.
-    You may need to adjust these mappings based on your actual OPM file column names.
+    Note: These mappings match the exact column names from OPM's 2026-fehb-plan-benefits_100525.xlsx
+    after parsing. The column base excludes suffixes like _money, _percent, _raw, _applies_after_deductible, etc.
+    Service names correspond to keys in service_costs.json.
     """
-    # Define mapping from service names to column bases
-    # These should be updated based on actual parsed column names
+    # Map service names to actual OPM parsed column bases
     service_mapping = {
-        'PrimaryCareVisit': 'Primary_Care_Office_Visit',
-        'SpecialistVisit': 'Specialist_Visit',
-        'EmergencyRoomVisit': 'Emergency_Room',
-        'UrgentCareVisit': 'Urgent_Care',
-        'InpatientHospitalStay': 'Inpatient_Hospital',
-        'OutpatientSurgery': 'Outpatient_Surgery',
-        'PreventiveCare': 'Preventive_Care',
-        'LabWork': 'Laboratory_Services',
-        'XRay': 'X_Ray',
-        'MRI': 'MRI_CT_PET',
-        'PhysicalTherapy': 'Physical_Therapy',
-        'MentalHealthVisit': 'Mental_Health_Visit',
-        'PrescriptionGeneric': 'Prescription_Drug_Generic',
-        'PrescriptionBrand': 'Prescription_Drug_Brand',
+        # Office Visits
+        'Primary Care': 'Primary_Care_Office_Visit',
+        'Specialist': 'Specialist_Office_Visit',
+        
+        # Emergency & Urgent Care
+        'Emergency Care': 'Emergency_Care',
+        'Urgent Care': 'Urgent_Care',
+        
+        # Inpatient Services
+        'Inpatient Admission': 'Hospital_Inpatient_Cost_Per_Admission',
+        'Room and Board': 'Hospital_Room_Costs',
+        
+        # Outpatient Services
+        'Outpatient Surgery': 'Other_Outpatient_Surgery_Costs',  # or Doctor_Costs_for_Outpatient_Surgery
+        
+        # Diagnostic Tests
+        'Outpatient Tests': 'Diagnostic_Tests_or_Procedures_(e.g.,_Blood_Tests,_X_rays,_Urinalysis,_Ultrasounds)',
+        'Simple Labs': 'Diagnostic_Tests_or_Procedures_(e.g.,_Blood_Tests,_X_rays,_Urinalysis,_Ultrasounds)',
+        'Complex Labs': 'Diagnostic_Tests_or_Procedures_(e.g.,_CT_scans,_MRIs,_PET_Scans)',
+        
+        # Prescriptions (Tiers)
+        'Medications Tier 0': 'Tier_0',
+        'Medications Tier 1': 'Tier_1',
+        'Medications Tier 2': 'Tier_2',
+        'Medications Tier 3': 'Tier_3',
+        'Medications Tier 4': 'Tier_4',
+        'Medications Tier 5': 'Tier_5',
+        
+        # Therapy Services
+        'ABA': 'Applied_Behavioral_Analysis_(ABA)',
+        'Chiropractic': 'Chiropractic',
+        'OT': 'Occupational_Therapy',
+        'Speech Therapy': 'Speech_Therapy',
+        'Physical Therapy': 'Physical_Therapy',
+        
+        # Specialized Services
+        'Infertility Services': 'Diagnosis_and_Treatment_(Infertility_Services)',
+        'Hearing Services': 'Hearing_Services',
+        'Maternity Care': 'Prenatal_Care,_Screening_for_Gestational_Diabetes,_Delivery,_and_Postpartum_Care_(Maternity_Care)',
+        
+        # Mental Health
+        'Mental Health Visit': 'Professional_Services_(Mental_Health_and_Substance_Use_Disorder)',
     }
     
     return service_mapping.get(service_name, service_name)
@@ -365,36 +393,56 @@ def calculate_costs(user_input: Dict[str, Any], user_data: Dict[str, Any], tax_r
                             print(f"Service {service_info['service']} not covered in plan {plan_id}")
                             continue
                         
-                        # Determine if deductible applies
+                        # Check special condition flags
                         deductible_applies = metadata.get('applies_after_deductible', False)
+                        prior_auth_required = metadata.get('prior_authorization', False)
+                        network_only = metadata.get('network_only', False)
+                        first_visit_only = metadata.get('first_visit_only', False)
                         
-                        # Calculate member pays based on cost type
+                        # Handle prior authorization flag
+                        if prior_auth_required:
+                            # Log for UI warning - for now, proceed with normal calculation
+                            # In future, this could set a flag in results for UI to display
+                            print(f"Note: Service {service_info['service']} requires prior authorization for plan {plan_id}")
+                        
+                        # Handle network-only services
+                        # Assumption: if network_only is True, we assume user is in-network
+                        # In future, could add user input for in/out of network
+                        
+                        # Calculate member pays based on cost type and deductible logic
                         if cost_type == 'copay':
-                            # Fixed copay - typically doesn't apply to deductible unless flagged
+                            # Fixed copay
                             if deductible_applies and deductible_remaining > 0:
-                                # Apply deductible first
+                                # Special case: "applies after deductible" means:
+                                # 1. Member pays full service cost until deductible is met
+                                # 2. Then the copay applies
                                 deductible_applied = min(avg_service_cost, deductible_remaining)
-                                member_pays = deductible_applied
                                 deductible_remaining -= deductible_applied
-                                # After deductible, apply copay
-                                if deductible_remaining == 0 and avg_service_cost > deductible_applied:
-                                    member_pays = member_cost
+                                
+                                if deductible_applied >= avg_service_cost:
+                                    # Entire service cost goes to deductible
+                                    member_pays = deductible_applied
+                                else:
+                                    # Deductible met during this service, apply copay
+                                    member_pays = deductible_applied + member_cost
                             else:
-                                # Direct copay, no deductible
+                                # Deductible already met or doesn't apply - just copay
                                 member_pays = member_cost
                                 
                         elif cost_type == 'coinsurance':
-                            # Coinsurance - calculated as percentage of allowed charge
-                            # This was already calculated in compute_cost_for_service
-                            member_pays = member_cost
-                            
-                            # Apply deductible logic for coinsurance
+                            # Coinsurance - always applies deductible first if not met
                             if deductible_remaining > 0:
-                                # If deductible not met, member pays full service cost until deductible is met
+                                # Member pays to satisfy deductible first
                                 deductible_applied = min(avg_service_cost, deductible_remaining)
-                                # Member pays deductible portion + coinsurance on remainder
-                                member_pays = deductible_applied + (avg_service_cost - deductible_applied) * (member_cost / avg_service_cost)
                                 deductible_remaining -= deductible_applied
+                                
+                                # Then apply coinsurance to any remaining allowed charge
+                                remaining_charge = avg_service_cost - deductible_applied
+                                coinsurance_amount = (member_cost / avg_service_cost) * remaining_charge
+                                member_pays = deductible_applied + coinsurance_amount
+                            else:
+                                # Deductible already met - just coinsurance
+                                member_pays = member_cost
                                 
                         elif cost_type == 'covered':
                             # Fully covered - member pays nothing
