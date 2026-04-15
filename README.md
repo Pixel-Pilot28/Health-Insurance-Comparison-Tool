@@ -3,7 +3,7 @@
 ## Overview
 The Health Insurance Comparison Tool is a web application that allows users to compare various health insurance plans based on projected costs. Users can input their expected medical expenses and personal financial details, and the tool will calculate estimated costs for each plan, including monthly and annual breakdowns, tax savings, and out-of-pocket expenses.
 
-![Alt Text](https://github.com/Pixel-Pilot28/Health-Insurance-Comparison-Tool/blob/main/HealthComparisonApp_V1.gif)
+![Health Plan Comparison Tool Demo](Health%20comparison%20tool.gif)
 
 The application features:
 - A **React-based frontend** for user input and visualization.

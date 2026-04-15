@@ -1,64 +1,397 @@
-﻿Plan,Short Name,Option,Enrollment Code,Enrollment Type,2025 Biweekly - Total Premium,2025 Biweekly - Gov't Pays,2025 Biweekly -Empl. Pays,2025 Monthly - Total Premium,2025 Monthly - Gov't Pays,2025 Monthly - Empl. Pays,Prescription Deductible,Premium Pass Through HSA/HRA Contribution,Catastrophic Limit,Prescription Limit,Calendar Year Deductible,Services & Benefits - Medical Account (HRA/HSA),Services & Benefits - Type of Account,Member Cost with Medicare A & B Primary - Deductible Waiver with Parts A & B,Member Cost with Medicare A & B Primary - Out-of-Pocket Maximum with Parts A & B,Member Cost with Medicare A & B Primary - Primary Care Physician Office Visit with Medicare A & B Primary,Member Cost with Medicare A & B Primary - Specialty Office Physician Visit with Parts A & B,Member Cost with Medicare A & B Primary - Inpatient Hospital Services with Parts A & B,Member Cost with Medicare A & B Primary - Outpatient Hospital Services with Parts A & B,Member Cost with Medicare A & B Primary - Part B Premium Reimbursement with Parts A & B,Member Cost with Medicare Advantage (Part C) Primary - Deductible Waiver with Part C,Member Cost with Medicare Advantage (Part C) Primary - Out-of-Pocket Maximum with Part C,Member Cost with Medicare Advantage (Part C) Primary - Primary Care Physician Office Visit with Medicare Advantage (Part C) Primary,Member Cost with Medicare Advantage (Part C) Primary - Specialty Physician Office Visit with Part C,Member Cost with Medicare Advantage (Part C) Primary - Inpatient Hospital Services with Part C,Member Cost with Medicare Advantage (Part C) Primary - Outpatient Hospital Services with Part C,Member Cost with Medicare Advantage (Part C) Primary - Part B Premium Reimbursement with Part C,Member Cost with Medicare Part D EGWP - Prescription Drug Deductible,Member Cost with Medicare Part D EGWP - Out-of-Pocket Maximum,Member Cost with Medicare Part D EGWP - EGWP Tier 0,Member Cost with Medicare Part D EGWP - EGWP Tier 1,Member Cost with Medicare Part D EGWP - EGWP Tier 2,Member Cost with Medicare Part D EGWP - EGWP Tier 3,Member Cost with Medicare Part D EGWP - EGWP Tier 4,Member Cost with Medicare Part D EGWP - EGWP Tier 5,Member Cost with Medicare Part D EGWP - EGWP Tier 6,Primary/Specialty Care - Preventive Care,Primary/Specialty Care - Primary Care Office Visit,Primary/Specialty Care - Specialist Office Visit,Primary/Specialty Care - Plan Requires Referral to See Certain Specialists,Emergency & Urgent Care - Emergency Care,Emergency & Urgent Care - Urgent Care,Emergency & Urgent Care - Accidental Injuries,Emergency & Urgent Care - Out-of-Pocket Waived,Surgery & Hospital Charges - Doctor Costs Inpatient Surgery,Surgery & Hospital Charges - Hospital Inpatient Cost,Surgery & Hospital Charges - Room & Board Charges,Surgery & Hospital Charges - Other Inpatient Costs,Surgery & Hospital Charges - Doctor Costs Outpatient Surgery,Surgery & Hospital Charges - Other Outpatient Costs,Surgery & Hospital Charges - Outpatient Tests,"Lab, X-Ray & Other Diagnostic Tests - Simple Diagnostic Tests/Procedures","Lab, X-Ray & Other Diagnostic Tests - Complex Diagnostic Tests/Procedures","Lab, X-Ray & Other Diagnostic Tests - Enhanced Lab Network",Prescription Drugs - Retail Generic,Prescription Drugs - Retail Brand,Prescription Drugs - Mail Service Pharmacy Benefit,Prescription Drugs - Specialty,Prescription Drugs - Mail Order Pharmacy Restriction,Prescription Drugs - Specialty Pharmacy Restriction,Prescription Drugs - Hormone Therapy,Prescription Drugs - Tier 0 Prescriptions,Prescription Drugs - Tier 1 Prescriptions,Prescription Drugs - Tier 2 Prescriptions,Prescription Drugs - Out-of-Pocket Maximum,Prescription Drugs - Tier 3 Prescriptions,Prescription Drugs - Tier 4 Prescriptions,Prescription Drugs - Tier 5 Prescriptions,Prescription Drugs - Tier 6 Prescriptions,"Treatment, Devices, and Services - Applied Behavioral Analysis (ABA)","Treatment, Devices, and Services - Is ABA Covered As Habilitative?","Treatment, Devices, and Services - Chiropractic","Treatment, Devices, and Services - Occupational Therapy","Treatment, Devices, and Services - Physical Therapy","Treatment, Devices, and Services - Speech Therapy","Treatment, Devices, and Services - Professional Services (Mental Health and Substance Use Disorder)","Treatment, Devices, and Services - Inpatient Hospital (Mental Health and Substance Use Disorder Services)","Treatment, Devices, and Services - Outpatient Hospital (Mental Health and Substance Use Disorder Services)","Treatment, Devices, and Services - Infertility Services","Treatment, Devices, and Services - Fertility Preservation Procedures (e.g., iatrogenic infertility) (Infertility Services)","Treatment, Devices, and Services - Artificial Insemination Services (e.g. ICI, IVI, IUI)","Treatment, Devices, and Services - Assisted Reproductive Technology (ART) (e.g., IVF, GIFT, ZIFT) (Infertility Services)","Treatment, Devices, and Services - Surgical Procedures","Treatment, Devices, and Services - Reconstructive Surgery","Treatment, Devices, and Services - Gender Affirming Surgery","Treatment, Devices, and Services - Hearing Services","Treatment, Devices, and Services - Hearing Aids (External)","Treatment, Devices, and Services - Maternity Care","Treatment, Devices, and Services - Maternity Care - Hospital Stay","Treatment, Devices, and Services - Hospice Care","Treatment, Devices, and Services - Home Health Services (Skilled Nursing Care)","Treatment, Devices, and Services - Durable Medical Equipment","Treatment, Devices, and Services - Outpatient Rehabilitation (Skilled Nursing Care Facility)","Treatment, Devices, and Services - Diabetes Education","Treatment, Devices, and Services - Nutritional Counseling",Dental - Routine Dental Exams and Cleaning for Adults,Dental - Routine Dental Exams and Cleaning for Children,Dental - Minor Restorative for Adults,Dental - Minor Restorative for Children,Dental - Major Restorative for Adults,Dental - Major Restorative for Children,Dental - Orthodontic,Vision - Routine Eye Exams,Vision - Eye Exams for Medical Condition or Non-Surgical Treatment,Vision - Eyeglass Frames & Lenses,Vision - Contacts,Alternative Care - Alternative Care,Alternative Care - Chronic Disease Management: Asthma,Alternative Care - Chronic Disease Management: Heart Disease,Alternative Care - Chronic Disease Management: Hypertension,Alternative Care - Chronic Disease Management: Obesity
-APWU Health Plan,APWU CDHP S,CDHP,474,Self,343.99,257.99,86,745.31,558.98,186.33,0,1200,6500,0,2200,Yes,HRA,N/A,6500,0.15,0.15,0.15,0.15,No,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0,0.15,0.15,No,0.15,0.15,0.15,No,15% $1000 Calendar Year Deductible,0.15,0.15,15% $1000 Calendar Year Deductible,0.15,15% $1000 Calendar Year Deductible,0.15,0.15,0.15,N/A,$15 Min Tier 1: 25% $200 Max Tier 2: 25% $200 Max Tier 3: 40% $300 Max,$15 Min Tier 1: 25% $200 Max Tier 2: 25% $200 Max Tier 3: 40% $300 Max,Yes,$15 Min Tier 1: 25% $200 Max Tier 2: 25% $200 Max Tier 3: 40% $300 Max,Yes,Yes,Covered,0,0.25,0.25,0,0.4,1,1,N/A,0.15,Yes,0.15,0.15,0.15,0.15,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,0.15,15% $1000 Calendar Year Deductible $12000 Max,15% $1000 Calendar Year Deductible,Member Pays All Charges,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,0.15,Covered $1500,0,0,$15000 Max,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,No,No,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-APWU Health Plan,APWU CDHP SF,CDHP,475,Self + Family,815.61,611.71,203.9,1767.16,1325.37,441.79,0,2400,13000,0,4400,Yes,HRA,N/A,6500,0.15,0.15,0.15,0.15,No,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0,0.15,0.15,No,0.15,0.15,0.15,No,15% $1000 Calendar Year Deductible,0.15,0.15,15% $1000 Calendar Year Deductible,0.15,15% $1000 Calendar Year Deductible,0.15,0.15,0.15,N/A,$15 Min Tier 1: 25% $200 Max Tier 2: 25% $200 Max Tier 3: 40% $300 Max,$15 Min Tier 1: 25% $200 Max Tier 2: 25% $200 Max Tier 3: 40% $300 Max,Yes,$15 Min Tier 1: 25% $200 Max Tier 2: 25% $200 Max Tier 3: 40% $300 Max,Yes,Yes,Covered,0,0.25,0.25,0,0.4,1,1,N/A,0.15,Yes,0.15,0.15,0.15,0.15,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,0.15,15% $1000 Calendar Year Deductible $12000 Max,15% $1000 Calendar Year Deductible,Member Pays All Charges,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,0.15,Covered $1500,0,0,$15000 Max,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,No,No,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-APWU Health Plan,APWU CDHP SO,CDHP,476,Self + One,747.64,560.73,186.91,1619.89,1214.92,404.97,0,2400,13000,0,4400,Yes,HRA,N/A,6500,0.15,0.15,0.15,0.15,No,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0,0.15,0.15,No,0.15,0.15,0.15,No,15% $1000 Calendar Year Deductible,0.15,0.15,15% $1000 Calendar Year Deductible,0.15,15% $1000 Calendar Year Deductible,0.15,0.15,0.15,N/A,$15 Min Tier 1: 25% $200 Max Tier 2: 25% $200 Max Tier 3: 40% $300 Max,$15 Min Tier 1: 25% $200 Max Tier 2: 25% $200 Max Tier 3: 40% $300 Max,Yes,$15 Min Tier 1: 25% $200 Max Tier 2: 25% $200 Max Tier 3: 40% $300 Max,Yes,Yes,Covered,0,0.25,0.25,0,0.4,1,1,N/A,0.15,Yes,0.15,0.15,0.15,0.15,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,0.15,15% $1000 Calendar Year Deductible $12000 Max,15% $1000 Calendar Year Deductible,Member Pays All Charges,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,0.15,Covered $1500,0,0,$15000 Max,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,15% $1000 Calendar Year Deductible,No,No,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-APWU Health Plan,APWU High S,High,471,Self,407.83,298.08,109.75,883.63,645.84,237.79,0,0,6500,0,450,No,N/A,Deductible Waived,6500,0,0,0,0,N/A,Deductible Waived,Prescription Max $2000,0,0,0,0,1200,N/A,2000,0,10,25% $200 Max,0.25,25% $300 Max,N/A,N/A,0,25,25,No,0.15,30,0,No,15% $450 Calendar Year Deductible,0.15,0.15,15% $0 Calendar Year Deductible,0.15,15% $450 Calendar Year Deductible,0.15,0.15,0.15,0,Tier 1: $10 Tier 2: 25% $200 Max Tier 3: 45% $300 Max,Tier 1: $10 Tier 2: 25% $200 Max Tier 3: 45% $300 Max,Yes,Tier 4: 25% $300 Max Tier 5: 25% $600 Max Tier 6: 45% $1000 Max,Yes,Yes,Covered,0,10,0.25,0,0.45,0.25,0.25,45% $1000 Max,0.15,Yes,25,0.15,0.15,0.15,25,15% $0 Calendar Year Deductible,15% $450 Calendar Year Deductible,0.15,15% $450 Calendar Year Deductible $12000 Max,15% $450 Calendar Year Deductible,Member Pays All Charges,15% $450 Calendar Year Deductible,15% $450 Calendar Year Deductible,15% $450 Calendar Year Deductible,0.15,Covered $1500,0,0,$15000 Max,15% $450 Calendar Year Deductible,15% $450 Calendar Year Deductible,0.15,15% $450 Calendar Year Deductible,0,Yes,Yes,Yes,Yes,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-APWU Health Plan,APWU High SF,High,472,Self + Family,978.73,714.23,264.5,2120.58,1547.5,573.08,0,0,13000,0,800,No,N/A,Deductible Waived,6500,0,0,0,0,N/A,Deductible Waived,Prescription Max $2000,0,0,0,0,1200,N/A,2000,0,10,25% $200 Max,0.25,25% $300 Max,N/A,N/A,0,25,25,No,0.15,30,0,No,15% $450 Calendar Year Deductible,0.15,0.15,15% $0 Calendar Year Deductible,0.15,15% $450 Calendar Year Deductible,0.15,0.15,0.15,0,Tier 1: $10 Tier 2: 25% $200 Max Tier 3: 45% $300 Max,Tier 1: $10 Tier 2: 25% $200 Max Tier 3: 45% $300 Max,Yes,Tier 4: 25% $300 Max Tier 5: 25% $600 Max Tier 6: 45% $1000 Max,Yes,Yes,Covered,0,10,0.25,0,0.45,0.25,0.25,45% $1000 Max,0.15,Yes,25,0.15,0.15,0.15,25,15% $0 Calendar Year Deductible,15% $450 Calendar Year Deductible,0.15,15% $450 Calendar Year Deductible $12000 Max,15% $450 Calendar Year Deductible,Member Pays All Charges,15% $450 Calendar Year Deductible,15% $450 Calendar Year Deductible,15% $450 Calendar Year Deductible,0.15,Covered $1500,0,0,$15000 Max,15% $450 Calendar Year Deductible,15% $450 Calendar Year Deductible,0.15,15% $450 Calendar Year Deductible,0,Yes,Yes,Yes,Yes,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-APWU Health Plan,APWU High SO,High,473,Self + One,856.39,642.29,214.1,1855.51,1391.63,463.88,0,0,13000,0,800,No,N/A,Deductible Waived,6500,0,0,0,0,N/A,Deductible Waived,Prescription Max $2000,0,0,0,0,1200,N/A,2000,0,10,25% $200 Max,0.25,25% $300 Max,N/A,N/A,0,25,25,No,0.15,30,0,No,15% $450 Calendar Year Deductible,0.15,0.15,15% $0 Calendar Year Deductible,0.15,15% $450 Calendar Year Deductible,0.15,0.15,0.15,0,Tier 1: $10 Tier 2: 25% $200 Max Tier 3: 45% $300 Max,Tier 1: $10 Tier 2: 25% $200 Max Tier 3: 45% $300 Max,Yes,Tier 4: 25% $300 Max Tier 5: 25% $600 Max Tier 6: 45% $1000 Max,Yes,Yes,Covered,0,10,0.25,0,0.45,0.25,0.25,45% $1000 Max,0.15,Yes,25,0.15,0.15,0.15,25,15% $0 Calendar Year Deductible,15% $450 Calendar Year Deductible,0.15,15% $450 Calendar Year Deductible $12000 Max,15% $450 Calendar Year Deductible,Member Pays All Charges,15% $450 Calendar Year Deductible,15% $450 Calendar Year Deductible,15% $450 Calendar Year Deductible,0.15,Covered $1500,0,0,$15000 Max,15% $450 Calendar Year Deductible,15% $450 Calendar Year Deductible,0.15,15% $450 Calendar Year Deductible,0,Yes,Yes,Yes,Yes,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-Blue Cross and Blue Shield Service Benefit Plan FEP Blue Basic,BCBS Basic S,Basic,111,Self,411.24,298.08,113.16,891.02,645.84,245.18,0,0,7500,0,0,No,N/A,N/A,$7500 $15000,0,0,0,0,800,N/A,$7500 $15000,0,0,0,0,No,N/A,2000,N/A,10,45,0.5,75,N/A,N/A,0,35,50,No,350,50,250,Yes,200,350,0,0,150,$250 Per Day Or $350 Per Day,40,40,40,N/A,Tier 1: $15,Tier 2: $75 Tier 3: 60% $90 Min,No,Tier 4: $120 Or Tier 5: $200,N/A,Yes,Covered,1,15,75,0,0.6,120,200,N/A,35,Yes,35,35,35,35,35,350,35,0.3,0.3,0.3,Member Pays All Charges,150,150,150,35,Covered,0,350,0,Member Pays All Charges,0.3,35,$35 Or $50,0,Yes,Yes,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-Blue Cross and Blue Shield Service Benefit Plan FEP Blue Basic,BCBS Basic SF,Basic,112,Self + Family,1017.84,714.23,303.61,2205.32,1547.5,657.82,0,0,15000,0,0,No,N/A,N/A,$7500 $15000,0,0,0,0,800,N/A,$7500 $15000,0,0,0,0,No,N/A,2000,N/A,10,45,0.5,75,N/A,N/A,0,35,50,No,350,50,250,Yes,200,350,0,0,150,$250 Per Day Or $350 Per Day,40,40,40,N/A,Tier 1: $15,Tier 2: $75 Tier 3: 60% $90 Min,No,Tier 4: $120 Or Tier 5: $200,N/A,Yes,Covered,1,15,75,0,0.6,120,200,N/A,35,Yes,35,35,35,35,35,350,35,0.3,0.3,0.3,Member Pays All Charges,150,150,150,35,Covered,0,350,0,Member Pays All Charges,0.3,35,$35 Or $50,0,Yes,Yes,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-Blue Cross and Blue Shield Service Benefit Plan FEP Blue Basic,BCBS Basic SO,Basic,113,Self + One,924.14,650,274.14,2002.3,1408.33,593.97,0,0,15000,0,0,No,N/A,N/A,$7500 $15000,0,0,0,0,800,N/A,$7500 $15000,0,0,0,0,No,N/A,2000,N/A,10,45,0.5,75,N/A,N/A,0,35,50,No,350,50,250,Yes,200,350,0,0,150,$250 Per Day Or $350 Per Day,40,40,40,N/A,Tier 1: $15,Tier 2: $75 Tier 3: 60% $90 Min,No,Tier 4: $120 Or Tier 5: $200,N/A,Yes,Covered,1,15,75,0,0.6,120,200,N/A,35,Yes,35,35,35,35,35,350,35,0.3,0.3,0.3,Member Pays All Charges,150,150,150,35,Covered,0,350,0,Member Pays All Charges,0.3,35,$35 Or $50,0,Yes,Yes,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-Blue Cross and Blue Shield Service Benefit Plan FEP Blue Focus,BCBS Focus S,FEP Blue Focus,131,Self,236.7,177.53,59.17,512.85,384.64,128.21,0,0,9000,0,500,No,N/A,$500 $1000,$9000 $18000,0,0,0,0,No,$500 $1000,$9000 $18000,0,0,0,0,No,N/A,2000,N/A,5,0.4,0.4,0.4,N/A,N/A,0,0.3,0.3,No,0.3,25,0,No,0.3,0.3,0,0,0.3,$0 Or $25 Or 30%,0.3,0.3,0.3,N/A,Tier 1: $5,Tier 2: 40% $350 Max,No,40% $350 Max,N/A,Yes,Covered,1,5,0.4,0,0.4,0.4,1,N/A,0.3,Yes,25,25,25,25,10,0.3,0.3,0.3,0.3,0.3,Member Pays All Charges,0.3,0.3,0.3,10,Not Covered,0,1500,0,Member Pays All Charges,0.3,25,0.3,0,No,No,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-Blue Cross and Blue Shield Service Benefit Plan FEP Blue Focus,BCBS Focus SF,FEP Blue Focus,132,Self + Family,559.7,419.78,139.92,1212.68,909.51,303.17,0,0,18000,0,1000,No,N/A,$500 $1000,$9000 $18000,0,0,0,0,No,$500 $1000,$9000 $18000,0,0,0,0,No,N/A,2000,N/A,5,0.4,0.4,0.4,N/A,N/A,0,0.3,0.3,No,0.3,25,0,No,0.3,0.3,0,0,0.3,$0 Or $25 Or 30%,0.3,0.3,0.3,N/A,Tier 1: $5,Tier 2: 40% $350 Max,No,40% $350 Max,N/A,Yes,Covered,1,5,0.4,0,0.4,0.4,1,N/A,0.3,Yes,25,25,25,25,10,0.3,0.3,0.3,0.3,0.3,Member Pays All Charges,0.3,0.3,0.3,10,Not Covered,0,1500,0,Member Pays All Charges,0.3,25,0.3,0,No,No,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-Blue Cross and Blue Shield Service Benefit Plan FEP Blue Focus,BCBS Focus SO,FEP Blue Focus,133,Self + One,508.86,381.65,127.21,1102.53,826.9,275.63,0,0,18000,0,1000,No,N/A,$500 $1000,$9000 $18000,0,0,0,0,No,$500 $1000,$9000 $18000,0,0,0,0,No,N/A,2000,N/A,5,0.4,0.4,0.4,N/A,N/A,0,0.3,0.3,No,0.3,25,0,No,0.3,0.3,0,0,0.3,$0 Or $25 Or 30%,0.3,0.3,0.3,N/A,Tier 1: $5,Tier 2: 40% $350 Max,No,40% $350 Max,N/A,Yes,Covered,1,5,0.4,0,0.4,0.4,1,N/A,0.3,Yes,25,25,25,25,10,0.3,0.3,0.3,0.3,0.3,Member Pays All Charges,0.3,0.3,0.3,10,Not Covered,0,1500,0,Member Pays All Charges,0.3,25,0.3,0,No,No,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-Blue Cross and Blue Shield Service Benefit Plan FEP Blue Standard,BCBS STD S,Standard,104,Self,472.89,298.08,174.81,1024.6,645.84,378.76,0,0,6000,0,350,No,N/A,Deductible Waived,$6000 $12000,0,0,0,0,No,Deductible Waived,$6000 $12000,0,0,0,0,No,N/A,2000,N/A,5,35,0.5,60,N/A,N/A,0,30,40,No,0.15,30,0,No,0.15,350,0,0,0.15,0.15,0.15,0.15,0.15,N/A,Tier 1: $7.50,Tier 2: 30% Tier 3: 50%,Yes,Tier 4: $65 Tier 5: $85 Or Tier 5: 30%,Yes,Yes,Covered,1,7.5,0.3,0,0.5,0.3,0.3,N/A,0.15,Yes,30,30,30,30,30,350,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,Covered,0,0,0,175,0.15,30,0.15,0,Yes,Yes,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-Blue Cross and Blue Shield Service Benefit Plan FEP Blue Standard,BCBS STD SF,Standard,105,Self + Family,1138.88,714.23,424.65,2467.57,1547.5,920.07,0,0,12000,0,700,No,N/A,Deductible Waived,$6000 $12000,0,0,0,0,No,Deductible Waived,$6000 $12000,0,0,0,0,No,N/A,2000,N/A,5,35,0.5,60,N/A,N/A,0,30,40,No,0.15,30,0,No,0.15,350,0,0,0.15,0.15,0.15,0.15,0.15,N/A,Tier 1: $7.50,Tier 2: 30% Tier 3: 50%,Yes,Tier 4: $65 Tier 5: $85 Or Tier 5: 30%,Yes,Yes,Covered,1,7.5,0.3,0,0.5,0.3,0.3,N/A,0.15,Yes,30,30,30,30,30,350,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,Covered,0,0,0,175,0.15,30,0.15,0,Yes,Yes,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-Blue Cross and Blue Shield Service Benefit Plan FEP Blue Standard,BCBS STD SO,Standard,106,Self + One,1034.14,650,384.14,2240.64,1408.33,832.31,0,0,12000,0,700,No,N/A,Deductible Waived,$6000 $12000,0,0,0,0,No,Deductible Waived,$6000 $12000,0,0,0,0,No,N/A,2000,N/A,5,35,0.5,60,N/A,N/A,0,30,40,No,0.15,30,0,No,0.15,350,0,0,0.15,0.15,0.15,0.15,0.15,N/A,Tier 1: $7.50,Tier 2: 30% Tier 3: 50%,Yes,Tier 4: $65 Tier 5: $85 Or Tier 5: 30%,Yes,Yes,Covered,1,7.5,0.3,0,0.5,0.3,0.3,N/A,0.15,Yes,30,30,30,30,30,350,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,Covered,0,0,0,175,0.15,30,0.15,0,Yes,Yes,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-Compass Rose Health Plan,Compass Rose High S,High,421,Self,422.56,298.08,124.48,915.55,645.84,269.71,0,0,5000,0,350,No,N/A,Deductible Waived,$5000 $10000,0,0,0,0,No,Deductible Waived,0,0,0,0,0,1500,Deductible Waived,2000,0,1,25,50,25% $75 Max,N/A,N/A,0,15,25,No,0.1,35,0.1,Yes,10% No deductible,200,0,0,0.1,10% $350 Calendar Year Deductible,0.1,0.1,0.1,0,Tier 1: $5,Tier 2: $50 Tier 3: 40% $75 Min,Yes,Tier 4: 10% $100 Max Tier 5: 25% $250 Max Tier 6: 35% $500 Max,Yes,Yes,Covered,0,5,50,0,0.4,0.1,0.25,35% $500 Max,0.1,Yes,0.1,0.1,0.1,0.1,$15 No deductible,$200 No deductible,10% $350 Calendar Year Deductible,0.1,10% $350 Calendar Year Deductible $5000 Max,10% $350 Calendar Year Deductible,Member Pays All Charges,10% No deductible,10% No deductible,10% No deductible,0,$2400 Covered $350 Calendar Year Deductible,0,0,10% $350 Calendar Year Deductible,10% No deductible,10% $350 Calendar Year Deductible,10% $350 Calendar Year Deductible,$15 No deductible,$15 No deductible,Yes,Yes,Yes,Yes,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-Compass Rose Health Plan,Compass Rose High SF,High,422,Self + Family,1014.18,714.23,299.95,2197.39,1547.5,649.89,0,0,10000,0,700,No,N/A,Deductible Waived,$5000 $10000,0,0,0,0,No,Deductible Waived,0,0,0,0,0,1500,Deductible Waived,2000,0,1,25,50,25% $75 Max,N/A,N/A,0,15,25,No,0.1,35,0.1,Yes,10% No deductible,200,0,0,0.1,10% $350 Calendar Year Deductible,0.1,0.1,0.1,0,Tier 1: $5,Tier 2: $50 Tier 3: 40% $75 Min,Yes,Tier 4: 10% $100 Max Tier 5: 25% $250 Max Tier 6: 35% $500 Max,Yes,Yes,Covered,0,5,50,0,0.4,0.1,0.25,35% $500 Max,0.1,Yes,0.1,0.1,0.1,0.1,$15 No deductible,$200 No deductible,10% $350 Calendar Year Deductible,0.1,10% $350 Calendar Year Deductible $5000 Max,10% $350 Calendar Year Deductible,Member Pays All Charges,10% No deductible,10% No deductible,10% No deductible,0,$2400 Covered $350 Calendar Year Deductible,0,0,10% $350 Calendar Year Deductible,10% No deductible,10% $350 Calendar Year Deductible,10% $350 Calendar Year Deductible,$15 No deductible,$15 No deductible,Yes,Yes,Yes,Yes,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-Compass Rose Health Plan,Compass Rose High SO,High,423,Self + One,929.65,650,279.65,2014.24,1408.33,605.91,0,0,10000,0,700,No,N/A,Deductible Waived,$5000 $10000,0,0,0,0,No,Deductible Waived,0,0,0,0,0,1500,Deductible Waived,2000,0,1,25,50,25% $75 Max,N/A,N/A,0,15,25,No,0.1,35,0.1,Yes,10% No deductible,200,0,0,0.1,10% $350 Calendar Year Deductible,0.1,0.1,0.1,0,Tier 1: $5,Tier 2: $50 Tier 3: 40% $75 Min,Yes,Tier 4: 10% $100 Max Tier 5: 25% $250 Max Tier 6: 35% $500 Max,Yes,Yes,Covered,0,5,50,0,0.4,0.1,0.25,35% $500 Max,0.1,Yes,0.1,0.1,0.1,0.1,$15 No deductible,$200 No deductible,10% $350 Calendar Year Deductible,0.1,10% $350 Calendar Year Deductible $5000 Max,10% $350 Calendar Year Deductible,Member Pays All Charges,10% No deductible,10% No deductible,10% No deductible,0,$2400 Covered $350 Calendar Year Deductible,0,0,10% $350 Calendar Year Deductible,10% No deductible,10% $350 Calendar Year Deductible,10% $350 Calendar Year Deductible,$15 No deductible,$15 No deductible,Yes,Yes,Yes,Yes,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-Compass Rose Health Plan,Compass Rose STD S,Standard,424,Self,232.61,174.46,58.15,503.99,377.99,126,0,0,9000,0,500,No,N/A,N/A,$9000 $18000,35,70,0.3,0.3,No,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0,10,30,No,500,50,500,Yes,30% $500 Calendar Year Deductible,0.3,0.3,30% $500 Calendar Year Deductible,0.3,30% $500 Calendar Year Deductible,0.3,0.3,0.3,30% $500 Calendar Year Deductible,Tier 1: $5,Tier 2: 40% $400 Max Tier 3: 100%,Yes,Tier 4: 50% $500 Max Tier 5: 50% $1500 Max Tier 6: 100%,Yes,Yes,Covered,0,5,0.4,0,1,0.5,0.5,1,0.3,Yes,0.3,0.3,0.3,0.3,$10 No deductible,30% $500 Calendar Year Deductible,30% $500 Calendar Year Deductible,0.3,30% $500 Calendar Year Deductible $1000 Max,30% $500 Calendar Year Deductible,Member Pays All Charges,30% $500 Calendar Year Deductible,30% $500 Calendar Year Deductible,30% $500 Calendar Year Deductible,0.3,Not Covered,30% $500 Calendar Year Deductible,0.3,30% $500 Calendar Year Deductible,30% $500 Calendar Year Deductible,30% $500 Calendar Year Deductible,Member Pays All Charges,30% $500 Calendar Year Deductible,30% $500 Calendar Year Deductible,Yes,Yes,Yes,Yes,No,No,No,Yes,Yes,Yes,Yes,Yes,Covered,Covered,Covered,Covered
-Compass Rose Health Plan,Compass Rose STD SF,Standard,425,Self + Family,558.27,418.7,139.57,1209.59,907.19,302.4,0,0,18000,0,1000,No,N/A,N/A,$9000 $18000,35,70,0.3,0.3,No,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0,10,30,No,500,50,500,Yes,30% $500 Calendar Year Deductible,0.3,0.3,30% $500 Calendar Year Deductible,0.3,30% $500 Calendar Year Deductible,0.3,0.3,0.3,30% $500 Calendar Year Deductible,Tier 1: $5,Tier 2: 40% $400 Max Tier 3: 100%,Yes,Tier 4: 50% $500 Max Tier 5: 50% $1500 Max Tier 6: 100%,Yes,Yes,Covered,0,5,0.4,0,1,0.5,0.5,1,0.3,Yes,0.3,0.3,0.3,0.3,$10 No deductible,30% $500 Calendar Year Deductible,30% $500 Calendar Year Deductible,0.3,30% $500 Calendar Year Deductible $1000 Max,30% $500 Calendar Year Deductible,Member Pays All Charges,30% $500 Calendar Year Deductible,30% $500 Calendar Year Deductible,30% $500 Calendar Year Deductible,0.3,Not Covered,30% $500 Calendar Year Deductible,0.3,30% $500 Calendar Year Deductible,30% $500 Calendar Year Deductible,30% $500 Calendar Year Deductible,Member Pays All Charges,30% $500 Calendar Year Deductible,30% $500 Calendar Year Deductible,Yes,Yes,Yes,Yes,No,No,No,Yes,Yes,Yes,Yes,Yes,Covered,Covered,Covered,Covered
-Compass Rose Health Plan,Compass Rose STD SO,Standard,426,Self + One,511.75,383.81,127.94,1108.79,831.59,277.2,0,0,18000,0,1000,No,N/A,N/A,$9000 $18000,35,70,0.3,0.3,No,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0,10,30,No,500,50,500,Yes,30% $500 Calendar Year Deductible,0.3,0.3,30% $500 Calendar Year Deductible,0.3,30% $500 Calendar Year Deductible,0.3,0.3,0.3,30% $500 Calendar Year Deductible,Tier 1: $5,Tier 2: 40% $400 Max Tier 3: 100%,Yes,Tier 4: 50% $500 Max Tier 5: 50% $1500 Max Tier 6: 100%,Yes,Yes,Covered,0,5,0.4,0,1,0.5,0.5,1,0.3,Yes,0.3,0.3,0.3,0.3,$10 No deductible,30% $500 Calendar Year Deductible,30% $500 Calendar Year Deductible,0.3,30% $500 Calendar Year Deductible $1000 Max,30% $500 Calendar Year Deductible,Member Pays All Charges,30% $500 Calendar Year Deductible,30% $500 Calendar Year Deductible,30% $500 Calendar Year Deductible,0.3,Not Covered,30% $500 Calendar Year Deductible,0.3,30% $500 Calendar Year Deductible,30% $500 Calendar Year Deductible,30% $500 Calendar Year Deductible,Member Pays All Charges,30% $500 Calendar Year Deductible,30% $500 Calendar Year Deductible,Yes,Yes,Yes,Yes,No,No,No,Yes,Yes,Yes,Yes,Yes,Covered,Covered,Covered,Covered
-Foreign Service Benefit Plan,FSBP High S,High,401,Self,373.44,280.08,93.36,809.12,606.84,202.28,0,0,5000,0,300,No,N/A,Deductible Waived,$5000.00 $7000.00,0,N/A,N/A,N/A,N/A,Deductible Waived,2000,0,N/A,N/A,N/A,$900 Max,N/A,2000,N/A,2,40,75,25% $150 Max,N/A,N/A,0,0.1,0.1,No,0.1,35,0,No,0.1,0,0,0,0.1,0.1,0.1,0.1,0.1,0,Tier 1: $10,Tier 2: 25% $30 Min $100 Max Tier 3: 35% $60 Min $200 Max,Yes,Tier 4: 25% $150 Max Tier 5: 25% $200 Max Tier 6: 35% $300 Max,Yes,Yes,Covered,1,10,0.25,0,0.35,0.25,0.25,35% $300 Max,0.1,Yes,75,0.1,0.1,0.1,$300 Calendar Year Deductible $600 Calendar Year Deductible 10%,$300 Calendar Year Deductible $600 Calendar Year Deductible 10%,$300 Calendar Year Deductible $600 Calendar Year Deductible 10%,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,Covered,0,0,0.1,0.1,0.1,0.1,10% $300 Calendar Year Deductible $600 Calendar Year Deductible,26 Combined Visits 0,Yes,Yes,No,No,No,No,Yes,No,Yes,No,No,Yes 50 Visit Limit,Covered,Covered,Covered,Covered
-Foreign Service Benefit Plan,FSBP High SF,High,402,Self + Family,923.81,692.86,230.95,2001.59,1501.19,500.4,0,0,7000,0,600,No,N/A,Deductible Waived,$5000.00 $7000.00,0,N/A,N/A,N/A,N/A,Deductible Waived,2000,0,N/A,N/A,N/A,$900 Max,N/A,2000,N/A,2,40,75,25% $150 Max,N/A,N/A,0,0.1,0.1,No,0.1,35,0,No,0.1,0,0,0,0.1,0.1,0.1,0.1,0.1,0,Tier 1: $10,Tier 2: 25% $30 Min $100 Max Tier 3: 35% $60 Min $200 Max,Yes,Tier 4: 25% $150 Max Tier 5: 25% $200 Max Tier 6: 35% $300 Max,Yes,Yes,Covered,1,10,0.25,0,0.35,0.25,0.25,35% $300 Max,0.1,Yes,75,0.1,0.1,0.1,$300 Calendar Year Deductible $600 Calendar Year Deductible 10%,$300 Calendar Year Deductible $600 Calendar Year Deductible 10%,$300 Calendar Year Deductible $600 Calendar Year Deductible 10%,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,Covered,0,0,0.1,0.1,0.1,0.1,10% $300 Calendar Year Deductible $600 Calendar Year Deductible,26 Combined Visits 0,Yes,Yes,No,No,No,No,Yes,No,Yes,No,No,Yes 50 Visit Limit,Covered,Covered,Covered,Covered
-Foreign Service Benefit Plan,FSBP High SO,High,403,Self + One,901.52,650,251.52,1953.29,1408.33,544.96,0,0,7000,0,600,No,N/A,Deductible Waived,$5000.00 $7000.00,0,N/A,N/A,N/A,N/A,Deductible Waived,2000,0,N/A,N/A,N/A,$900 Max,N/A,2000,N/A,2,40,75,25% $150 Max,N/A,N/A,0,0.1,0.1,No,0.1,35,0,No,0.1,0,0,0,0.1,0.1,0.1,0.1,0.1,0,Tier 1: $10,Tier 2: 25% $30 Min $100 Max Tier 3: 35% $60 Min $200 Max,Yes,Tier 4: 25% $150 Max Tier 5: 25% $200 Max Tier 6: 35% $300 Max,Yes,Yes,Covered,1,10,0.25,0,0.35,0.25,0.25,35% $300 Max,0.1,Yes,75,0.1,0.1,0.1,$300 Calendar Year Deductible $600 Calendar Year Deductible 10%,$300 Calendar Year Deductible $600 Calendar Year Deductible 10%,$300 Calendar Year Deductible $600 Calendar Year Deductible 10%,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,Covered,0,0,0.1,0.1,0.1,0.1,10% $300 Calendar Year Deductible $600 Calendar Year Deductible,26 Combined Visits 0,Yes,Yes,No,No,No,No,Yes,No,Yes,No,No,Yes 50 Visit Limit,Covered,Covered,Covered,Covered
-GEHA Benefit Plan,GEHA High S,High,311,Self,435.19,298.08,137.11,942.91,645.84,297.07,0,0,6000,0,350,No,N/A,Deductible Waived,$6000 $12000,0,0,0,0,1000,Deductible Waived,0,0,0,0,0,$1200 Max,N/A,2000,0,9,20% $150 Max,35% $200 Max,15% $150 Max,15% $150 Max,N/A,0,20,30,No,0.15,30,0,No,0.1,100,0.1,0.1,0.1,0.1,0.1,0,0.1,N/A,10,25% $150 Max Or 40% $200 Max,Yes,25% $150 Max Or 40% $200 Max,Yes,Yes,Covered,0,10,0.25,0,0.4,0.25,0.4,N/A,0.1,Yes,20,0.1,0.1,0.1,20,$100 10%,0.1,0.1,0.1,0.1,0.2,0.1,0.1,0.1,0.1,Covered $2500,0,0,0 $30000 Max,0.1,0.1,0.1,0,0,Yes,Yes,Yes,Yes,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-GEHA Benefit Plan,GEHA High SF,High,312,Self + Family,1090.55,714.23,376.32,2362.86,1547.5,815.36,0,0,12000,0,700,No,N/A,Deductible Waived,$6000 $12000,0,0,0,0,1000,Deductible Waived,0,0,0,0,0,$1200 Max,N/A,2000,0,9,20% $150 Max,35% $200 Max,15% $150 Max,15% $150 Max,N/A,0,20,30,No,0.15,30,0,No,0.1,100,0.1,0.1,0.1,0.1,0.1,0,0.1,N/A,10,25% $150 Max Or 40% $200 Max,Yes,25% $150 Max Or 40% $200 Max,Yes,Yes,Covered,0,10,0.25,0,0.4,0.25,0.4,N/A,0.1,Yes,20,0.1,0.1,0.1,20,$100 10%,0.1,0.1,0.1,0.1,0.2,0.1,0.1,0.1,0.1,Covered $2500,0,0,0 $30000 Max,0.1,0.1,0.1,0,0,Yes,Yes,Yes,Yes,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-GEHA Benefit Plan,GEHA High SO,High,313,Self + One,957.42,650,307.42,2074.41,1408.33,666.08,0,0,12000,0,700,No,N/A,Deductible Waived,$6000 $12000,0,0,0,0,1000,Deductible Waived,0,0,0,0,0,$1200 Max,N/A,2000,0,9,20% $150 Max,35% $200 Max,15% $150 Max,15% $150 Max,N/A,0,20,30,No,0.15,30,0,No,0.1,100,0.1,0.1,0.1,0.1,0.1,0,0.1,N/A,10,25% $150 Max Or 40% $200 Max,Yes,25% $150 Max Or 40% $200 Max,Yes,Yes,Covered,0,10,0.25,0,0.4,0.25,0.4,N/A,0.1,Yes,20,0.1,0.1,0.1,20,$100 10%,0.1,0.1,0.1,0.1,0.2,0.1,0.1,0.1,0.1,Covered $2500,0,0,0 $30000 Max,0.1,0.1,0.1,0,0,Yes,Yes,Yes,Yes,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-GEHA Benefit Plan,GEHA STD S,Standard,314,Self,321.29,240.97,80.32,696.13,522.1,174.03,0,0,6500,0,350,No,N/A,Deductible Waived,$6500 $13000,0,0,0,0,No,Deductible Waived,0,0,0,0,0,$900 Max,N/A,2000,0,9,25% $200 Max,50% $300 Max,33% $250 Max,33% $250 Max,N/A,0,20,35,No,0.2,30,0.2,No,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,100,0,10,40% $250 Max Or 60% $350 Max,Yes,50% $250 Max Or 50% $400 Max,Yes,Yes,Covered,0,10,0.4,0,0.6,0.5,0.5,N/A,0.15,Yes,35,0.15,0.15,0.15,20,0.15,0.15,0.15,0.15,0.15,Member Pays All Charges,0.15,0.15,0.15,0.15,Covered $2500,0,0,0 $30000 Max,0.15,0.15,0.15,0,0,Yes,Yes,Yes,Yes,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-GEHA Benefit Plan,GEHA STD SF,Standard,315,Self + Family,857.21,642.91,214.3,1857.29,1392.97,464.32,0,0,13000,0,700,No,N/A,Deductible Waived,$6500 $13000,0,0,0,0,No,Deductible Waived,0,0,0,0,0,$900 Max,N/A,2000,0,9,25% $200 Max,50% $300 Max,33% $250 Max,33% $250 Max,N/A,0,20,35,No,0.2,30,0.2,No,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,100,0,10,40% $250 Max Or 60% $350 Max,Yes,50% $250 Max Or 50% $400 Max,Yes,Yes,Covered,0,10,0.4,0,0.6,0.5,0.5,N/A,0.15,Yes,35,0.15,0.15,0.15,20,0.15,0.15,0.15,0.15,0.15,Member Pays All Charges,0.15,0.15,0.15,0.15,Covered $2500,0,0,0 $30000 Max,0.15,0.15,0.15,0,0,Yes,Yes,Yes,Yes,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-GEHA Benefit Plan,GEHA STD SO,Standard,316,Self + One,690.8,518.1,172.7,1496.73,1122.55,374.18,0,0,13000,0,700,No,N/A,Deductible Waived,$6500 $13000,0,0,0,0,No,Deductible Waived,0,0,0,0,0,$900 Max,N/A,2000,0,9,25% $200 Max,50% $300 Max,33% $250 Max,33% $250 Max,N/A,0,20,35,No,0.2,30,0.2,No,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,100,0,10,40% $250 Max Or 60% $350 Max,Yes,50% $250 Max Or 50% $400 Max,Yes,Yes,Covered,0,10,0.4,0,0.6,0.5,0.5,N/A,0.15,Yes,35,0.15,0.15,0.15,20,0.15,0.15,0.15,0.15,0.15,Member Pays All Charges,0.15,0.15,0.15,0.15,Covered $2500,0,0,0 $30000 Max,0.15,0.15,0.15,0,0,Yes,Yes,Yes,Yes,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-GEHA HDHP,GEHA HDHP S,HDHP,341,Self,305.1,228.83,76.27,661.05,495.79,165.26,0,1000,6000,0,1650,Yes,HSA,$1650 $3300,$6000 $12000,0.05,0.05,0.05,0.05,1000,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0,0.05,0.05,No,0.05,0.05,0.05,No,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,N/A,0.25,25% Or 40%,Yes,25% Or 40%,Yes,Yes,Covered,0,0.25,0.25,0,0.4,0.25,0.4,N/A,0.05,Yes,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,Member Pays All Charges,0.05,0.05,0.05,0.05,Not Covered,0,0,5% $30000 Max,0.05,0.05,0.05,0,0,Yes,Yes,Yes,Yes,No,No,No,Yes,Yes,Yes,Yes,Yes,Covered,Covered,Covered,Covered
-GEHA HDHP,GEHA HDHP SF,HDHP,342,Self + Family,806.08,604.56,201.52,1746.51,1309.88,436.63,0,2000,12000,0,3300,Yes,HSA,$1650 $3300,$6000 $12000,0.05,0.05,0.05,0.05,1000,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0,0.05,0.05,No,0.05,0.05,0.05,No,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,N/A,0.25,25% Or 40%,Yes,25% Or 40%,Yes,Yes,Covered,0,0.25,0.25,0,0.4,0.25,0.4,N/A,0.05,Yes,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,Member Pays All Charges,0.05,0.05,0.05,0.05,Not Covered,0,0,5% $30000 Max,0.05,0.05,0.05,0,0,Yes,Yes,Yes,Yes,No,No,No,Yes,Yes,Yes,Yes,Yes,Covered,Covered,Covered,Covered
-GEHA HDHP,GEHA HDHP SO,HDHP,343,Self + One,655.96,491.97,163.99,1421.25,1065.94,355.31,0,2000,12000,0,3300,Yes,HSA,$1650 $3300,$6000 $12000,0.05,0.05,0.05,0.05,1000,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0,0.05,0.05,No,0.05,0.05,0.05,No,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,N/A,0.25,25% Or 40%,Yes,25% Or 40%,Yes,Yes,Covered,0,0.25,0.25,0,0.4,0.25,0.4,N/A,0.05,Yes,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,Member Pays All Charges,0.05,0.05,0.05,0.05,Not Covered,0,0,5% $30000 Max,0.05,0.05,0.05,0,0,Yes,Yes,Yes,Yes,No,No,No,Yes,Yes,Yes,Yes,Yes,Covered,Covered,Covered,Covered
-GEHA Indemnity Benefit Plan,GEHA Elev Plus S,Elevate Plus,251,Self,441.57,298.08,143.49,956.74,645.84,310.9,0,0,7000,0,200,No,N/A,Deductible Waived,7000,0,0,0,0,No,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0,30,50,No,0.15,50,0.15,Yes,0.15,0.15,1,N/A,0.15,0.15,50,50,100,N/A,10,$80 Or 50%,Yes,40% $500 Max Or 50%,Yes,Yes,Covered,0,10,80,0,0.5,0.4,0.5,N/A,30,Yes,30,40,40,40,30,0.15,0.15,0.15,$30 Or $50,0.15,Member Pays All Charges,0.15,0.15,0.15,40,Covered $1500,0,0.15,0 $30000 Max,30,0.15,0.15,0,0,No,No,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-GEHA Indemnity Benefit Plan,GEHA Elev Plus SF,Elevate Plus,252,Self + Family,1061.79,714.23,347.56,2300.55,1547.5,753.05,0,0,14000,0,400,No,N/A,Deductible Waived,7000,0,0,0,0,No,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0,30,50,No,0.15,50,0.15,Yes,0.15,0.15,1,N/A,0.15,0.15,50,50,100,N/A,10,$80 Or 50%,Yes,40% $500 Max Or 50%,Yes,Yes,Covered,0,10,80,0,0.5,0.4,0.5,N/A,30,Yes,30,40,40,40,30,0.15,0.15,0.15,$30 Or $50,0.15,Member Pays All Charges,0.15,0.15,0.15,40,Covered $1500,0,0.15,0 $30000 Max,30,0.15,0.15,0,0,No,No,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-GEHA Indemnity Benefit Plan,GEHA Elev Plus SO,Elevate Plus,253,Self + One,967.29,650,317.29,2095.8,1408.33,687.47,0,0,14000,0,400,No,N/A,Deductible Waived,7000,0,0,0,0,No,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0,30,50,No,0.15,50,0.15,Yes,0.15,0.15,1,N/A,0.15,0.15,50,50,100,N/A,10,$80 Or 50%,Yes,40% $500 Max Or 50%,Yes,Yes,Covered,0,10,80,0,0.5,0.4,0.5,N/A,30,Yes,30,40,40,40,30,0.15,0.15,0.15,$30 Or $50,0.15,Member Pays All Charges,0.15,0.15,0.15,40,Covered $1500,0,0.15,0 $30000 Max,30,0.15,0.15,0,0,No,No,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-GEHA Indemnity Benefit Plan,GEHA Elev S,Elevate,254,Self,231.31,173.48,57.83,501.17,375.88,125.29,0,0,8500,0,500,No,N/A,$500 $1000,8500,10,30,0.25,0.25,No,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0,10,30,No,0.25,50,0.25,Yes,250,0.25,1,N/A,0.25,0.25,0.25,0.25,0.25,N/A,4,50% $500 Max Or Member Pays All Charges,No,50% $500 Max Or Member Pays All Charges,N/A,Yes,Covered,0,4,0.5,0,1,0.5,1,N/A,0.25,Yes,10,30,30,30,10,0.25,0.25,0.25,$10 Or $30,0.25,Member Pays All Charges,250,250,250,30,Not Covered,0,0.25,0 $30000 Max,0.25,0.25,Member Pays All Charges,0,0,No,No,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-GEHA Indemnity Benefit Plan,GEHA Elev SF,Elevate,255,Self + Family,679.35,509.51,169.84,1471.93,1103.95,367.98,0,0,17000,0,1000,No,N/A,$500 $1000,8500,10,30,0.25,0.25,No,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0,10,30,No,0.25,50,0.25,Yes,250,0.25,1,N/A,0.25,0.25,0.25,0.25,0.25,N/A,4,50% $500 Max Or Member Pays All Charges,No,50% $500 Max Or Member Pays All Charges,N/A,Yes,Covered,0,4,0.5,0,1,0.5,1,N/A,0.25,Yes,10,30,30,30,10,0.25,0.25,0.25,$10 Or $30,0.25,Member Pays All Charges,250,250,250,30,Not Covered,0,0.25,0 $30000 Max,0.25,0.25,Member Pays All Charges,0,0,No,No,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-GEHA Indemnity Benefit Plan,GEHA Elev SO,Elevate,256,Self + One,558.03,418.52,139.51,1209.07,906.8,302.27,0,0,17000,0,1000,No,N/A,$500 $1000,8500,10,30,0.25,0.25,No,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0,10,30,No,0.25,50,0.25,Yes,250,0.25,1,N/A,0.25,0.25,0.25,0.25,0.25,N/A,4,50% $500 Max Or Member Pays All Charges,No,50% $500 Max Or Member Pays All Charges,N/A,Yes,Covered,0,4,0.5,0,1,0.5,1,N/A,0.25,Yes,10,30,30,30,10,0.25,0.25,0.25,$10 Or $30,0.25,Member Pays All Charges,250,250,250,30,Not Covered,0,0.25,0 $30000 Max,0.25,0.25,Member Pays All Charges,0,0,No,No,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-MHBP Consumer Option,MHBP HDHP S,HDHP,481,Self,336.8,252.6,84.2,729.73,547.3,182.43,0,1200,6000,0,2000,Yes,HSA,Deductible Waived,$6000 $12000,0,0,0,0,No,N/A,6000,15,15,$75 Per Day Up To $750 Per Admission,75,No,N/A,2000,0,8,45,70,0.25,N/A,N/A,0,15,15,No,50,50,50,Yes,0,75,0,0,150,75,75,15,15,0,10,Tier 2: 30% + Difference Between Plan Allowance and Billed Amount $200 Max Tier 3: 50% + Difference Between Plan Allowance and Billed Amount $200 Max,Yes,Tier 4: 30% $225 Max Tier 5: 30% $225 Max Tier 6: 30% $275 Max,Yes,Yes,Covered,0,10,0.3,0,0.5,0.3,0.3,30% $275 Max,15,Yes,15,15,15,15,15,$75 $750 Max,15,15,15,15,Member Pays All Charges,0,0,0,15,Covered,0,0,5,15,0,75,0,0,No,No,No,No,No,No,No,No,Yes,Yes,Yes,Yes,Covered,Covered,Covered,Covered
-MHBP Consumer Option,MHBP HDHP SF,HDHP,482,Self + Family,782.59,586.94,195.65,1695.61,1271.71,423.9,0,2400,12000,0,4000,Yes,HSA,Deductible Waived,$6000 $12000,0,0,0,0,No,N/A,6000,15,15,$75 Per Day Up To $750 Per Admission,75,No,N/A,2000,0,8,45,70,0.25,N/A,N/A,0,15,15,No,50,50,50,Yes,0,75,0,0,150,75,75,15,15,0,10,Tier 2: 30% + Difference Between Plan Allowance and Billed Amount $200 Max Tier 3: 50% + Difference Between Plan Allowance and Billed Amount $200 Max,Yes,Tier 4: 30% $225 Max Tier 5: 30% $225 Max Tier 6: 30% $275 Max,Yes,Yes,Covered,0,10,0.3,0,0.5,0.3,0.3,30% $275 Max,15,Yes,15,15,15,15,15,$75 $750 Max,15,15,15,15,Member Pays All Charges,0,0,0,15,Covered,0,0,5,15,0,75,0,0,No,No,No,No,No,No,No,No,Yes,Yes,Yes,Yes,Covered,Covered,Covered,Covered
-MHBP Consumer Option,MHBP HDHP SO,HDHP,483,Self + One,745.34,559.01,186.33,1614.9,1211.18,403.72,0,2400,12000,0,4000,Yes,HSA,Deductible Waived,$6000 $12000,0,0,0,0,No,N/A,6000,15,15,$75 Per Day Up To $750 Per Admission,75,No,N/A,2000,0,8,45,70,0.25,N/A,N/A,0,15,15,No,50,50,50,Yes,0,75,0,0,150,75,75,15,15,0,10,Tier 2: 30% + Difference Between Plan Allowance and Billed Amount $200 Max Tier 3: 50% + Difference Between Plan Allowance and Billed Amount $200 Max,Yes,Tier 4: 30% $225 Max Tier 5: 30% $225 Max Tier 6: 30% $275 Max,Yes,Yes,Covered,0,10,0.3,0,0.5,0.3,0.3,30% $275 Max,15,Yes,15,15,15,15,15,$75 $750 Max,15,15,15,15,Member Pays All Charges,0,0,0,15,Covered,0,0,5,15,0,75,0,0,No,No,No,No,No,No,No,No,Yes,Yes,Yes,Yes,Covered,Covered,Covered,Covered
-MHBP Standard Option,MHBP STD S,Standard,454,Self,335.33,251.5,83.83,726.55,544.91,181.64,0,0,6000,0,350,No,N/A,Deductible Waived,$6000 $12000,0,0,0,0,No,Deductible Waived,$2000 Prescription Max,0,0,0,0,$900 Max,N/A,2000,0,5,45,60,15% $225 Max,N/A,N/A,0,20,30,No,200,50,200,Yes,0.1,200,0,0.1,0.1,0.1,0.1,0.1,0.1,0,5,Tier 2: 30% $200 Max Tier 3: 50% $200 Max,Yes,Tier 4: 15% $225 Max Tier 5: 15% $225 Max Tier 6: 25% $275 Max,Yes,Yes,Covered,0,5,0.3,0,0.5,0.15,0.15,25% $275 Max,0.1,Yes,20,0.1,0.1,0.1,20,$200 10%,0.1,0.1,0.1,0.1,Member Pays All Charges,0.1,0.2,0.1,0,Covered,0,0,0.1,0.1,0.1,0.1,0.1,0,No,No,No,No,No,No,No,No,Yes,Yes,Yes,Yes,Covered,Covered,Covered,Covered
-MHBP Standard Option,MHBP STD SF,Standard,455,Self + Family,779.28,584.46,194.82,1688.44,1266.33,422.11,0,0,12000,0,700,No,N/A,Deductible Waived,$6000 $12000,0,0,0,0,No,Deductible Waived,$2000 Prescription Max,0,0,0,0,$900 Max,N/A,2000,0,5,45,60,15% $225 Max,N/A,N/A,0,20,30,No,200,50,200,Yes,0.1,200,0,0.1,0.1,0.1,0.1,0.1,0.1,0,5,Tier 2: 30% $200 Max Tier 3: 50% $200 Max,Yes,Tier 4: 15% $225 Max Tier 5: 15% $225 Max Tier 6: 25% $275 Max,Yes,Yes,Covered,0,5,0.3,0,0.5,0.15,0.15,25% $275 Max,0.1,Yes,20,0.1,0.1,0.1,20,$200 10%,0.1,0.1,0.1,0.1,Member Pays All Charges,0.1,0.2,0.1,0,Covered,0,0,0.1,0.1,0.1,0.1,0.1,0,No,No,No,No,No,No,No,No,Yes,Yes,Yes,Yes,Covered,Covered,Covered,Covered
-MHBP Standard Option,MHBP STD SO,Standard,456,Self + One,771.87,578.9,192.97,1672.39,1254.29,418.1,0,0,12000,0,700,No,N/A,Deductible Waived,$6000 $12000,0,0,0,0,No,Deductible Waived,$2000 Prescription Max,0,0,0,0,$900 Max,N/A,2000,0,5,45,60,15% $225 Max,N/A,N/A,0,20,30,No,200,50,200,Yes,0.1,200,0,0.1,0.1,0.1,0.1,0.1,0.1,0,5,Tier 2: 30% $200 Max Tier 3: 50% $200 Max,Yes,Tier 4: 15% $225 Max Tier 5: 15% $225 Max Tier 6: 25% $275 Max,Yes,Yes,Covered,0,5,0.3,0,0.5,0.15,0.15,25% $275 Max,0.1,Yes,20,0.1,0.1,0.1,20,$200 10%,0.1,0.1,0.1,0.1,Member Pays All Charges,0.1,0.2,0.1,0,Covered,0,0,0.1,0.1,0.1,0.1,0.1,0,No,No,No,No,No,No,No,No,Yes,Yes,Yes,Yes,Covered,Covered,Covered,Covered
-MHBP Value Plan,MHBP Value S,Value,414,Self,242.13,181.6,60.53,524.62,393.47,131.15,0,0,6600,0,600,No,N/A,N/A,$6600 $13200,N/A $30,50,0.2,0.2,No,N/A,N/A,30,50,0.2,0.2,No,N/A,2000,0,10,47,100,33% $250 Max,N/A,N/A,0,30,50,No,0.2,0.2,0.2,No,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0,10,Tier 2: 45% $300 Max Tier 3: 75% $500 Max,Yes,Tier 4: 50% $600 Max Tier 5: 50% $600 Max Tier 6: 50% $700 Max,Yes,Yes,Covered,0,10,0.45,0,0.75,0.5,0.5,50% $700 Max,0.2,Yes,0.2,0.2,0.2,0.2,30,0.2,0.2,0.2,0.2,0.2,Member Pays All Charges,0.2,0.2,0.2,0,Not Covered,0,0,0.2,0.2,0.2,0.2,0.2,0,No,No,No,No,No,No,No,No,Yes,Yes,Yes,Yes,Covered,Covered,Covered,Covered
-MHBP Value Plan,MHBP Value SF,Value,415,Self + Family,585.17,438.88,146.29,1267.87,950.9,316.97,0,0,13200,0,1200,No,N/A,N/A,$6600 $13200,N/A $30,50,0.2,0.2,No,N/A,N/A,30,50,0.2,0.2,No,N/A,2000,0,10,47,100,33% $250 Max,N/A,N/A,0,30,50,No,0.2,0.2,0.2,No,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0,10,Tier 2: 45% $300 Max Tier 3: 75% $500 Max,Yes,Tier 4: 50% $600 Max Tier 5: 50% $600 Max Tier 6: 50% $700 Max,Yes,Yes,Covered,0,10,0.45,0,0.75,0.5,0.5,50% $700 Max,0.2,Yes,0.2,0.2,0.2,0.2,30,0.2,0.2,0.2,0.2,0.2,Member Pays All Charges,0.2,0.2,0.2,0,Not Covered,0,0,0.2,0.2,0.2,0.2,0.2,0,No,No,No,No,No,No,No,No,Yes,Yes,Yes,Yes,Covered,Covered,Covered,Covered
-MHBP Value Plan,MHBP Value SO,Value,416,Self + One,573.72,430.29,143.43,1243.06,932.3,310.76,0,0,13200,0,1200,No,N/A,N/A,$6600 $13200,N/A $30,50,0.2,0.2,No,N/A,N/A,30,50,0.2,0.2,No,N/A,2000,0,10,47,100,33% $250 Max,N/A,N/A,0,30,50,No,0.2,0.2,0.2,No,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0,10,Tier 2: 45% $300 Max Tier 3: 75% $500 Max,Yes,Tier 4: 50% $600 Max Tier 5: 50% $600 Max Tier 6: 50% $700 Max,Yes,Yes,Covered,0,10,0.45,0,0.75,0.5,0.5,50% $700 Max,0.2,Yes,0.2,0.2,0.2,0.2,30,0.2,0.2,0.2,0.2,0.2,Member Pays All Charges,0.2,0.2,0.2,0,Not Covered,0,0,0.2,0.2,0.2,0.2,0.2,0,No,No,No,No,No,No,No,No,Yes,Yes,Yes,Yes,Covered,Covered,Covered,Covered
-NALC Health Benefit Plan,NALC CDHP S,CDHP,324,Self,238.71,179.03,59.68,517.21,387.91,129.3,0,1200,6600,0,2000,Yes,HRA,2000,6600,0.2,0.2,0.2,0.2,No,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,2000,0,10,40,60,250,N/A,N/A,0,0.2,0.2,No,0.2,0.2,0.2,No,20% $2000 Calendar Year Maximum toward Plan Level Deductible,0.2,0.2,20% $2000 Calendar Year Maximum toward Plan Level Deductible,0.2,20% $2000 Calendar Year Maximum toward Plan Level Deductible,0.2,0.2,0.2,N/A,Tier 1: $10,Tier 2: $40 Tier 3: $60,Yes,Tier 4: $250,Yes,Yes,Covered,0,10,40,0,60,250,1,N/A,0.2,Yes,0.2,0.2,0.2,0.2,20% $2000 Calendar Year Maximum toward Plan Level Deductible,20% $2000 Calendar Year Maximum toward Plan Level Deductible,20% $2000 Calendar Year Maximum toward Plan Level Deductible,0.2,20% $2000 Calendar Year Maximum toward Plan Level Deductible,0.2,Member Pays All Charges,20% $2000 Calendar Year Maximum toward Plan Level Deductible,20% $2000 Calendar Year Maximum toward Plan Level Deductible,20% $2000 Calendar Year Maximum toward Plan Level Deductible,0.2,Covered,20% $2000 Calendar Year Maximum toward Plan Level Deductible,0.2,Member Pays All Charges,20% $2000 Calendar Year Maximum toward Plan Level Deductible,20% $2000 Calendar Year Maximum toward Plan Level Deductible,Member Pays All Charges,0,0,No,No,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-NALC Health Benefit Plan,NALC CDHP SF,CDHP,325,Self + Family,585.06,438.8,146.26,1267.63,950.72,316.91,0,2400,12000,0,4000,Yes,HRA,2000,6600,0.2,0.2,0.2,0.2,No,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,2000,0,10,40,60,250,N/A,N/A,0,0.2,0.2,No,0.2,0.2,0.2,No,20% $2000 Calendar Year Maximum toward Plan Level Deductible,0.2,0.2,20% $2000 Calendar Year Maximum toward Plan Level Deductible,0.2,20% $2000 Calendar Year Maximum toward Plan Level Deductible,0.2,0.2,0.2,N/A,Tier 1: $10,Tier 2: $40 Tier 3: $60,Yes,Tier 4: $250,Yes,Yes,Covered,0,10,40,0,60,250,1,N/A,0.2,Yes,0.2,0.2,0.2,0.2,20% $2000 Calendar Year Maximum toward Plan Level Deductible,20% $2000 Calendar Year Maximum toward Plan Level Deductible,20% $2000 Calendar Year Maximum toward Plan Level Deductible,0.2,20% $2000 Calendar Year Maximum toward Plan Level Deductible,0.2,Member Pays All Charges,20% $2000 Calendar Year Maximum toward Plan Level Deductible,20% $2000 Calendar Year Maximum toward Plan Level Deductible,20% $2000 Calendar Year Maximum toward Plan Level Deductible,0.2,Covered,20% $2000 Calendar Year Maximum toward Plan Level Deductible,0.2,Member Pays All Charges,20% $2000 Calendar Year Maximum toward Plan Level Deductible,20% $2000 Calendar Year Maximum toward Plan Level Deductible,Member Pays All Charges,0,0,No,No,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-NALC Health Benefit Plan,NALC CDHP SO,CDHP,326,Self + One,540.49,405.37,135.12,1171.06,878.3,292.76,0,2400,12000,0,4000,Yes,HRA,2000,6600,0.2,0.2,0.2,0.2,No,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,2000,0,10,40,60,250,N/A,N/A,0,0.2,0.2,No,0.2,0.2,0.2,No,20% $2000 Calendar Year Maximum toward Plan Level Deductible,0.2,0.2,20% $2000 Calendar Year Maximum toward Plan Level Deductible,0.2,20% $2000 Calendar Year Maximum toward Plan Level Deductible,0.2,0.2,0.2,N/A,Tier 1: $10,Tier 2: $40 Tier 3: $60,Yes,Tier 4: $250,Yes,Yes,Covered,0,10,40,0,60,250,1,N/A,0.2,Yes,0.2,0.2,0.2,0.2,20% $2000 Calendar Year Maximum toward Plan Level Deductible,20% $2000 Calendar Year Maximum toward Plan Level Deductible,20% $2000 Calendar Year Maximum toward Plan Level Deductible,0.2,20% $2000 Calendar Year Maximum toward Plan Level Deductible,0.2,Member Pays All Charges,20% $2000 Calendar Year Maximum toward Plan Level Deductible,20% $2000 Calendar Year Maximum toward Plan Level Deductible,20% $2000 Calendar Year Maximum toward Plan Level Deductible,0.2,Covered,20% $2000 Calendar Year Maximum toward Plan Level Deductible,0.2,Member Pays All Charges,20% $2000 Calendar Year Maximum toward Plan Level Deductible,20% $2000 Calendar Year Maximum toward Plan Level Deductible,Member Pays All Charges,0,0,No,No,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-NALC Health Benefit Plan,NALC High S,High,321,Self,434.16,298.08,136.08,940.68,645.84,294.84,0,0,3500,3100,300,No,N/A,Deductible Waived,0,0,0,0,0,600,Deductible Waived,Prescription Max $2000,0,0,0,0,$900 Max,Deductible Waived,2000,0,0.1,0.2,0.4,200,N/A,N/A,0,25,25,No,0.15,25,0,No,0.15,350,350,350,0.15,15% $300 Calendar Year Maximum toward Plan Level Deductible,0.15,0.15,0.15,Yes,Tier 1: 20%,Tier 2: 30% Tier 3: 50%,Yes,Tier 4: $200,Yes,Yes,Covered,0,0.2,0.3,0,0.5,200,1,N/A,0.15,Yes,25,0.15,0.15,0.15,25,350,15% $300 Calendar Year Maximum toward Plan Level Deductible,0.15,15% $300 Calendar Year Maximum toward Plan Level Deductible,0.15,Member Pays All Charges,0.15,0.15,0.15,0.15,Covered,0,0,15% $300 Calendar Year Maximum toward Plan Level Deductible,15% $300 Calendar Year Maximum toward Plan Level Deductible,15% $300 Calendar Year Maximum toward Plan Level Deductible,0.15,0,0,No,No,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-NALC Health Benefit Plan,NALC High SF,High,322,Self + Family,998.17,714.23,283.94,2162.7,1547.5,615.2,0,0,7000,5000,600,No,N/A,Deductible Waived,0,0,0,0,0,600,Deductible Waived,Prescription Max $2000,0,0,0,0,$900 Max,Deductible Waived,2000,0,0.1,0.2,0.4,200,N/A,N/A,0,25,25,No,0.15,25,0,No,0.15,350,350,350,0.15,15% $300 Calendar Year Maximum toward Plan Level Deductible,0.15,0.15,0.15,Yes,Tier 1: 20%,Tier 2: 30% Tier 3: 50%,Yes,Tier 4: $200,Yes,Yes,Covered,0,0.2,0.3,0,0.5,200,1,N/A,0.15,Yes,25,0.15,0.15,0.15,25,350,15% $300 Calendar Year Maximum toward Plan Level Deductible,0.15,15% $300 Calendar Year Maximum toward Plan Level Deductible,0.15,Member Pays All Charges,0.15,0.15,0.15,0.15,Covered,0,0,15% $300 Calendar Year Maximum toward Plan Level Deductible,15% $300 Calendar Year Maximum toward Plan Level Deductible,15% $300 Calendar Year Maximum toward Plan Level Deductible,0.15,0,0,No,No,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-NALC Health Benefit Plan,NALC High SO,High,323,Self + One,968.71,650,318.71,2098.87,1408.33,690.54,0,0,7000,5000,600,No,N/A,Deductible Waived,0,0,0,0,0,600,Deductible Waived,Prescription Max $2000,0,0,0,0,$900 Max,Deductible Waived,2000,0,0.1,0.2,0.4,200,N/A,N/A,0,25,25,No,0.15,25,0,No,0.15,350,350,350,0.15,15% $300 Calendar Year Maximum toward Plan Level Deductible,0.15,0.15,0.15,Yes,Tier 1: 20%,Tier 2: 30% Tier 3: 50%,Yes,Tier 4: $200,Yes,Yes,Covered,0,0.2,0.3,0,0.5,200,1,N/A,0.15,Yes,25,0.15,0.15,0.15,25,350,15% $300 Calendar Year Maximum toward Plan Level Deductible,0.15,15% $300 Calendar Year Maximum toward Plan Level Deductible,0.15,Member Pays All Charges,0.15,0.15,0.15,0.15,Covered,0,0,15% $300 Calendar Year Maximum toward Plan Level Deductible,15% $300 Calendar Year Maximum toward Plan Level Deductible,15% $300 Calendar Year Maximum toward Plan Level Deductible,0.15,0,0,No,No,No,No,No,No,No,No,Yes,No,No,Yes,Covered,Covered,Covered,Covered
-Panama Canal Area Benefit Plan,PCABP High S,High,431,Self,425.91,298.08,127.83,922.81,645.84,276.97,0,0,8200,8200,0,No,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0,5,5,Yes,5,0,0,No,0,25,0,0,0,0,0,0,0,N/A,0.2,0.3,No,20% Or 30%,N/A,No,N/A,1,1,1,0,1,1,1,N/A,1,N/A,10,0,0,0,5,25,0,5,5,5,Member Pays All Charges,0,0,N/A,10,10,0,0,0,0,30% + Difference Between Plan Allowance and Billed Amount,0,0,0,Yes,Yes,No,No,No,No,No,No,No,No,No,Yes,Not Covered,Not Covered,Not Covered,Not Covered
-Panama Canal Area Benefit Plan,PCABP High SF,High,432,Self + Family,897.35,673.01,224.34,1944.26,1458.2,486.06,0,0,12000,12000,0,No,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0,5,5,Yes,5,0,0,No,0,25,0,0,0,0,0,0,0,N/A,0.2,0.3,No,20% Or 30%,N/A,No,N/A,1,1,1,0,1,1,1,N/A,1,N/A,10,0,0,0,5,25,0,5,5,5,Member Pays All Charges,0,0,N/A,10,10,0,0,0,0,30% + Difference Between Plan Allowance and Billed Amount,0,0,0,Yes,Yes,No,No,No,No,No,No,No,No,No,Yes,Not Covered,Not Covered,Not Covered,Not Covered
-Panama Canal Area Benefit Plan,PCABP High SO,High,433,Self + One,858.01,643.51,214.5,1859.02,1394.27,464.75,0,0,12000,12000,0,No,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0,5,5,Yes,5,0,0,No,0,25,0,0,0,0,0,0,0,N/A,0.2,0.3,No,20% Or 30%,N/A,No,N/A,1,1,1,0,1,1,1,N/A,1,N/A,10,0,0,0,5,25,0,5,5,5,Member Pays All Charges,0,0,N/A,10,10,0,0,0,0,30% + Difference Between Plan Allowance and Billed Amount,0,0,0,Yes,Yes,No,No,No,No,No,No,No,No,No,Yes,Not Covered,Not Covered,Not Covered,Not Covered
-SAMBA Health Benefit Plan,SAMBA High S,High,441,Self,459.05,298.08,160.97,994.61,645.84,348.77,0,0,5000,0,300,No,N/A,Deductible Waived,N/A,0,0,Waived Waived,0,No,0,0,0,0,0,0,$1200 Max,N/A,2000,0,$5 30 days $10 90 days,20% $100 Max 30 days 20% $200 Max 90 days,25% $300 Max 30 days 25% $400 Max 90 days,25% $160 Max 30 days,N/A,N/A,0,15,25,No,0.15,0.15,0,No,0.15,200,0,0.15,0.15,0.15,0.15,0.15,0.15,0,Tier 1: $10,Tier 2: 30% $100 Max Tier 3: 45% $300 Max,Yes,Tier 4: 30% $160 Max Tier 5: 45% $320 Max,Yes,Yes,Covered,0,10,0.3,0,0.45,0.3,0.45,N/A,0.15,Yes,0.15,0.15,0.15,0.15,15,$200 15%,0.15,0.15,0.15,0.15,Member Pays All Charges,0.15,0.15,0.15,0.15,Covered,0.15,0,0.15,0.15,0.15,0.15,0.15,0.15,No,No,No,No,No,No,No,No,Yes,No,No,Yes 26 Visit Limit,Covered,Covered,Covered,Covered
-SAMBA Health Benefit Plan,SAMBA High SF,High,442,Self + Family,1101.73,714.23,387.5,2387.08,1547.5,839.58,0,0,10000,0,600,No,N/A,Deductible Waived,N/A,0,0,Waived Waived,0,No,0,0,0,0,0,0,$1200 Max,N/A,2000,0,$5 30 days $10 90 days,20% $100 Max 30 days 20% $200 Max 90 days,25% $300 Max 30 days 25% $400 Max 90 days,25% $160 Max 30 days,N/A,N/A,0,15,25,No,0.15,0.15,0,No,0.15,200,0,0.15,0.15,0.15,0.15,0.15,0.15,0,Tier 1: $10,Tier 2: 30% $100 Max Tier 3: 45% $300 Max,Yes,Tier 4: 30% $160 Max Tier 5: 45% $320 Max,Yes,Yes,Covered,0,10,0.3,0,0.45,0.3,0.45,N/A,0.15,Yes,0.15,0.15,0.15,0.15,15,$200 15%,0.15,0.15,0.15,0.15,Member Pays All Charges,0.15,0.15,0.15,0.15,Covered,0.15,0,0.15,0.15,0.15,0.15,0.15,0.15,No,No,No,No,No,No,No,No,Yes,No,No,Yes 26 Visit Limit,Covered,Covered,Covered,Covered
-SAMBA Health Benefit Plan,SAMBA High SO,High,443,Self + One,1009.92,650,359.92,2188.16,1408.33,779.83,0,0,10000,0,600,No,N/A,Deductible Waived,N/A,0,0,Waived Waived,0,No,0,0,0,0,0,0,$1200 Max,N/A,2000,0,$5 30 days $10 90 days,20% $100 Max 30 days 20% $200 Max 90 days,25% $300 Max 30 days 25% $400 Max 90 days,25% $160 Max 30 days,N/A,N/A,0,15,25,No,0.15,0.15,0,No,0.15,200,0,0.15,0.15,0.15,0.15,0.15,0.15,0,Tier 1: $10,Tier 2: 30% $100 Max Tier 3: 45% $300 Max,Yes,Tier 4: 30% $160 Max Tier 5: 45% $320 Max,Yes,Yes,Covered,0,10,0.3,0,0.45,0.3,0.45,N/A,0.15,Yes,0.15,0.15,0.15,0.15,15,$200 15%,0.15,0.15,0.15,0.15,Member Pays All Charges,0.15,0.15,0.15,0.15,Covered,0.15,0,0.15,0.15,0.15,0.15,0.15,0.15,No,No,No,No,No,No,No,No,Yes,No,No,Yes 26 Visit Limit,Covered,Covered,Covered,Covered
-SAMBA Health Benefit Plan,SAMBA STD S,Standard,444,Self,382.57,286.93,95.64,828.9,621.68,207.22,0,0,6000,0,350,No,N/A,Deductible Waived,N/A,0,0,Waived Waived,0,No,0,0,0,0,0,0,$900 Max,N/A,2000,0,$7 30 days $12 90 days,25% $150 Max 30 days 25% $300 Max 90 days,25% $300 Max 30 days 25% $400 Max 90 days,25% $240 Max 30 days,N/A,N/A,0,20,30,No,0.2,0.2,0,No,0.2,200,0,0.2,0.2,0.2,0.2,0.2,0.2,0,Tier 1: $12,Tier 2: 35% $150 Max Tier 3: 50% $300 Max,Yes,Tier 4: 35% $240 Max Tier 5: 50% $480 Max,Yes,Yes,Covered,0,12,0.35,0,0.5,0.35,0.5,N/A,0.2,Yes,0.2,0.2,0.2,0.2,$20 $30,$200 20%,0.2,0.2,0.2,0.2,Member Pays All Charges,0.2,0.2,0.2,0.2,Covered,0,0,0.2,0.2,0.2,0.2,0.2,0.2,No,No,No,No,No,No,No,No,Yes,No,No,Yes 26 Visit Limit,Covered,Covered,Covered,Covered
-SAMBA Health Benefit Plan,SAMBA STD SF,Standard,445,Self + Family,872.83,654.62,218.21,1891.13,1418.35,472.78,0,0,12000,0,900,No,N/A,Deductible Waived,N/A,0,0,Waived Waived,0,No,0,0,0,0,0,0,$900 Max,N/A,2000,0,$7 30 days $12 90 days,25% $150 Max 30 days 25% $300 Max 90 days,25% $300 Max 30 days 25% $400 Max 90 days,25% $240 Max 30 days,N/A,N/A,0,20,30,No,0.2,0.2,0,No,0.2,200,0,0.2,0.2,0.2,0.2,0.2,0.2,0,Tier 1: $12,Tier 2: 35% $150 Max Tier 3: 50% $300 Max,Yes,Tier 4: 35% $240 Max Tier 5: 50% $480 Max,Yes,Yes,Covered,0,12,0.35,0,0.5,0.35,0.5,N/A,0.2,Yes,0.2,0.2,0.2,0.2,$20 $30,$200 20%,0.2,0.2,0.2,0.2,Member Pays All Charges,0.2,0.2,0.2,0.2,Covered,0,0,0.2,0.2,0.2,0.2,0.2,0.2,No,No,No,No,No,No,No,No,Yes,No,No,Yes 26 Visit Limit,Covered,Covered,Covered,Covered
-SAMBA Health Benefit Plan,SAMBA STD SO,Standard,446,Self + One,823.43,617.57,205.86,1784.1,1338.08,446.02,0,0,12000,0,700,No,N/A,Deductible Waived,N/A,0,0,Waived Waived,0,No,0,0,0,0,0,0,$900 Max,N/A,2000,0,$7 30 days $12 90 days,25% $150 Max 30 days 25% $300 Max 90 days,25% $300 Max 30 days 25% $400 Max 90 days,25% $240 Max 30 days,N/A,N/A,0,20,30,No,0.2,0.2,0,No,0.2,200,0,0.2,0.2,0.2,0.2,0.2,0.2,0,Tier 1: $12,Tier 2: 35% $150 Max Tier 3: 50% $300 Max,Yes,Tier 4: 35% $240 Max Tier 5: 50% $480 Max,Yes,Yes,Covered,0,12,0.35,0,0.5,0.35,0.5,N/A,0.2,Yes,0.2,0.2,0.2,0.2,$20 $30,$200 20%,0.2,0.2,0.2,0.2,Member Pays All Charges,0.2,0.2,0.2,0.2,Covered,0,0,0.2,0.2,0.2,0.2,0.2,0.2,No,No,No,No,No,No,No,No,Yes,No,No,Yes 26 Visit Limit,Covered,Covered,Covered,Covered
+Biweekly_Total,Biweekly_Govt,Biweekly_Emp
+245.73000000000002,184.3,61.43
+540.59,405.44,135.15
+651.15,488.36,162.79
+831.16,623.37,207.79
+722.79,542.09,180.7
+329.58,247.19,82.39
+1591.6,778.03,813.57
+697.9,324.76,373.14
+1575.82,711.17,864.65
+610.15,324.76,285.39
+1377.44,711.17,666.27
+1391.23,778.03,613.2
+650.86,324.76,326.1
+1469.92,711.17,758.75
+1484.59,778.03,706.56
+643.12,324.76,318.36
+1465.9299999999998,778.03,687.9
+1451.73,711.17,740.56
+1579.27,778.03,801.24
+692.8,324.76,368.04
+1563.62,711.17,852.45
+479.52,324.76,154.76
+1057.72,778.03,279.69
+1037.02,711.17,325.85
+751.8299999999999,324.76,427.07
+1673.48,711.17,962.31
+1690.24,778.03,912.21
+978.14,733.61,244.53
+427.40999999999997,320.56,106.85
+898.21,673.66,224.55
+1578.08,711.17,866.91
+685.64,324.76,360.88
+1609.6100000000001,778.03,831.58
+1018.66,324.76,693.9
+2492.21,711.17,1781.04
+2517.13,778.03,1739.1
+2788.52,778.03,2010.49
+2760.91,711.17,2049.74
+1207.23,324.76,882.47
+2306.52,711.17,1595.35
+2329.5699999999997,778.03,1551.54
+960.85,324.76,636.09
+2144.56,711.17,1433.39
+887.98,324.76,563.22
+2166.0,778.03,1387.97
+2115.13,711.17,1403.96
+2136.3,778.03,1358.27
+921.77,324.76,597.01
+924.68,324.76,599.92
+2124.91,711.17,1413.74
+2146.19,778.03,1368.16
+581.51,436.13,145.38
+276.7,207.53,69.17
+633.26,474.95,158.31
+729.9300000000001,324.76,405.17
+1638.69,711.17,927.52
+1671.49,778.03,893.46
+1387.62,711.17,676.45
+1415.42,778.03,637.39
+618.0899999999999,324.76,293.33
+572.5,324.76,247.74
+1285.5,711.17,574.33
+1311.1799999999998,778.03,533.15
+659.53,324.76,334.77
+1483.88,711.17,772.71
+1513.56,778.03,735.53
+1776.7599999999998,711.17,1065.59
+786.0699999999999,324.76,461.31
+1794.47,778.03,1016.44
+1236.75,778.03,458.72
+540.18,324.76,215.42
+1167.1599999999999,711.17,455.99
+680.97,510.73,170.24
+289.78,217.34,72.44
+643.3,482.48,160.82
+706.4300000000001,529.82,176.61
+300.6,225.45,75.15
+667.35,500.51,166.84
+1134.8899999999999,778.03,356.86
+1030.42,711.17,319.25
+458.53,324.76,133.77
+765.23,573.92,191.31
+318.84999999999997,239.14,79.71
+701.47,526.1,175.37
+535.91,401.93,133.98
+584.63,438.47,146.16
+243.6,182.7,60.9
+575.29,431.47,143.82
+239.71,179.78,59.93
+527.35,395.51,131.84
+366.09999999999997,274.58,91.52
+869.8199999999999,652.37,217.45
+732.18,549.14,183.04
+990.13,742.6,247.53
+412.7,309.53,103.17
+876.62,657.47,219.15
+1002.76,711.17,291.59
+1103.04,778.03,325.01
+466.4,324.76,141.64
+800.04,600.03,200.01
+372.11,279.08,93.03
+880.02,660.02,220.0
+464.91999999999996,324.76,140.16
+1115.75,778.03,337.72
+976.28,711.17,265.11
+849.6899999999999,637.27,212.42
+383.95,287.96,95.99
+892.15,669.11,223.04
+529.89,324.76,205.13
+1160.75,711.17,449.58
+1274.15,778.03,496.12
+751.95,563.96,187.99
+915.4200000000001,686.57,228.85
+311.69,233.77,77.92
+631.9,473.93,157.97
+574.54,430.91,143.63
+267.26,200.45,66.81
+630.3399999999999,324.76,305.58
+1328.08,778.03,550.05
+1269.85,711.17,558.68
+390.01,292.51,97.5
+865.8199999999999,649.37,216.45
+865.8199999999999,649.37,216.45
+420.72,315.54,105.18
+1103.08,778.03,325.05
+1046.9299999999998,711.17,335.76
+1575.69,778.03,797.66
+1560.1100000000001,711.17,848.94
+712.48,324.76,387.72
+379.17,284.38,94.79
+900.89,675.67,225.22
+758.34,568.76,189.58
+401.3,300.98,100.32
+862.79,647.09,215.7
+919.9200000000001,689.94,229.98
+433.21999999999997,324.76,108.46
+931.4300000000001,698.57,232.86
+996.4200000000001,747.32,249.1
+796.41,597.31,199.1
+748.4200000000001,561.32,187.1
+348.6,261.45,87.15
+171.88,128.91,42.97
+71.2,53.4,17.8
+190.87,143.15,47.72
+980.36,735.27,245.09
+392.14,294.11,98.03
+862.71,647.03,215.68
+803.99,602.99,201.0
+423.16,317.37,105.79
+1002.83,752.12,250.71
+1322.08,778.03,544.05
+1211.9,711.17,500.73
+550.85,324.76,226.09
+819.11,614.33,204.78
+819.11,614.33,204.78
+367.32,275.49,91.83
+532.65,399.49,133.16
+232.6,174.45,58.15
+522.26,391.7,130.56
+1635.87,778.03,857.84
+1384.1999999999998,711.17,673.03
+629.1800000000001,324.76,304.42
+445.15999999999997,324.76,120.4
+1062.0,778.03,283.97
+973.53,711.17,262.36
+522.17,391.63,130.54
+708.71,531.53,177.18
+267.57,200.68,66.89
+701.88,526.41,175.47
+326.47,244.85,81.62
+862.51,646.88,215.63
+849.2,636.9,212.3
+948.9,711.68,237.22
+355.35,266.51,88.84
+954.26,715.7,238.56
+874.73,656.05,218.68
+402.47,301.85,100.62
+1144.12,711.17,432.95
+1303.21,778.03,525.18
+520.05,324.76,195.29
+1115.6,778.03,337.57
+1022.6099999999999,711.17,311.44
+464.82,324.76,140.06
+523.69,324.76,198.93
+1250.1,778.03,472.07
+1250.1,711.17,538.93
+1025.62,711.17,314.45
+454.06,324.76,129.3
+1025.62,769.22,256.4
+519.51,324.76,194.75
+1265.51,778.03,487.48
+1148.11,711.17,436.94
+901.61,676.21,225.4
+411.48,308.61,102.87
+925.02,693.77,231.25
+1204.6299999999999,711.17,493.46
+547.55,324.76,222.79
+1204.63,778.03,426.6
+587.05,324.76,262.29
+1350.1999999999998,711.17,639.03
+1432.38,778.03,654.35
+1001.84,751.38,250.46
+984.41,711.17,273.24
+435.58,324.76,110.82
+469.03,324.76,144.27
+1078.75,711.17,367.58
+1078.75,778.03,300.72
+1320.9699999999998,711.17,609.8
+1401.38,778.03,623.35
+574.3299999999999,324.76,249.57
+1525.67,711.17,814.5
+693.48,324.76,368.72
+1664.3600000000001,778.03,886.33
+1014.03,760.52,253.51
+1014.03,711.17,302.86
+448.69,324.76,123.93
+499.25,324.76,174.49
+1022.91,711.17,311.74
+1043.4099999999999,778.03,265.38
+837.18,627.89,209.29
+291.19,218.39,72.8
+582.17,436.63,145.54
+439.37,324.76,114.61
+1032.5,774.38,258.12
+1032.5,711.17,321.33
+1249.35,778.03,471.32
+930.47,697.85,232.62
+478.98,324.76,154.22
+412.22,309.17,103.05
+981.49,736.12,245.37
+890.8,668.1,222.7
+481.79999999999995,324.76,157.04
+1113.52,778.03,335.49
+1113.52,711.17,402.35
+1069.7,778.03,291.67
+445.71,324.76,120.95
+980.56,711.17,269.39
+401.45,301.09,100.36
+969.1299999999999,711.17,257.96
+993.1,744.83,248.27
+913.56,324.76,588.8
+2192.54,778.03,1414.51
+2009.8200000000002,711.17,1298.65
+1520.81,778.03,742.78
+542.38,324.76,217.62
+1059.26,711.17,348.09
+872.79,654.59,218.2
+864.5,648.38,216.12
+375.58,281.69,93.89
+1225.38,711.17,514.21
+569.94,324.76,245.18
+1350.75,778.03,572.72
+925.06,693.8,231.26
+391.13,293.35,97.78
+840.96,630.72,210.24
+1084.71,711.17,373.54
+1193.1599999999999,778.03,415.13
+504.49,324.76,179.73
+1331.48,711.17,620.31
+586.53,324.76,261.77
+1378.34,778.03,600.31
+992.3599999999999,711.17,281.19
+437.14,324.76,112.38
+1027.29,770.47,256.82
+1125.6799999999998,711.17,414.51
+495.87,324.76,171.11
+1165.29,778.03,387.26
+327.09,245.32,81.77
+765.38,574.04,191.34
+765.38,574.04,191.34
+565.16,423.87,141.29
+227.88,170.91,56.97
+489.93,367.45,122.48
+563.98,422.99,140.99
+210.14000000000001,157.61,52.53
+501.82,376.37,125.45
+226.92,170.19,56.73
+558.21,418.66,139.55
+512.84,384.63,128.21
+231.32,173.49,57.83
+650.8,488.1,162.7
+552.64,414.48,138.16
+638.26,478.7,159.56
+245.82,184.37,61.45
+555.6,416.7,138.9
+208.16,156.12,52.04
+480.84,360.63,120.21
+516.25,387.19,129.06
+524.22,393.17,131.05
+576.64,432.48,144.16
+237.92,178.44,59.48
+877.91,658.43,219.48
+804.75,603.56,201.19
+365.78999999999996,274.34,91.45
+946.94,710.21,236.73
+447.62,324.76,122.86
+1029.94,772.46,257.48
+567.08,425.31,141.77
+567.08,425.31,141.77
+254.29999999999998,190.73,63.57
+451.28,324.76,126.52
+992.8199999999999,711.17,281.65
+1173.31,778.03,395.28
+1224.98,711.17,513.81
+1298.01,778.03,519.98
+566.92,324.76,242.16
+383.85999999999996,287.9,95.96
+565.78,424.34,141.44
+194.71,146.03,48.68
+1018.0799999999999,763.56,254.52
+961.76,711.17,250.59
+433.21999999999997,324.76,108.46
+1190.21,778.03,412.18
+1124.36,711.17,413.19
+506.47,324.76,181.71
+513.0799999999999,324.76,188.32
+1122.05,711.17,410.88
+1235.69,778.03,457.66
+746.06,559.55,186.51
+346.99,260.24,86.75
+925.79,694.34,231.45
+246.56,184.92,61.64
+591.77,443.83,147.94
+542.45,406.84,135.61
+1018.35,763.76,254.59
+435.18,324.76,110.42
+1018.3499999999999,711.17,307.18
+401.41999999999996,301.07,100.35
+922.15,691.61,230.54
+922.15,691.61,230.54
+696.29,522.22,174.07
+767.49,575.62,191.87
+315.06,236.3,78.76
+251.8,188.85,62.95
+551.67,413.75,137.92
+566.02,424.52,141.5
+416.9,312.68,104.22
+958.88,719.16,239.72
+958.88,711.17,247.71
+819.94,614.96,204.98
+869.85,652.39,217.46
+356.49,267.37,89.12
+871.73,653.8,217.93
+385.72,289.29,96.43
+871.73,653.8,217.93
+867.71,650.78,216.93
+867.71,650.78,216.93
+377.26,282.95,94.31
+830.74,623.06,207.68
+374.23,280.67,93.56
+830.74,623.06,207.68
+1137.12,711.17,425.95
+1240.49,778.03,462.46
+516.87,324.76,192.11
+341.23,255.92,85.31
+771.19,578.39,192.8
+771.19,578.39,192.8
+1281.65,778.03,503.62
+580.36,324.76,255.6
+1268.96,711.17,557.79
+1361.34,778.03,583.31
+1145.92,711.17,434.75
+572.96,324.76,248.2
+371.47,278.6,92.87
+185.39,139.04,46.35
+611.88,458.91,152.97
+937.89,703.42,234.47
+385.49,289.12,96.37
+1056.71,778.03,278.68
+773.91,580.43,193.48
+697.98,523.49,174.49
+292.05,219.04,73.01
+726.32,544.74,181.58
+373.89,280.42,93.47
+975.24,731.43,243.81
+425.89,319.42,106.47
+936.96,702.72,234.24
+1064.74,778.03,286.71
+379.48,284.61,94.87
+937.96,703.47,234.49
+874.8,656.1,218.7
+705.98,324.76,381.22
+1694.37,778.03,916.34
+1553.17,711.17,842.0
+489.1,324.76,164.34
+1247.2199999999998,711.17,536.05
+1320.58,778.03,542.55
+655.6899999999999,491.77,163.92
+279.01,209.26,69.75
+619.41,464.56,154.85
+636.02,477.02,159.0
+270.65,202.99,67.66
+600.84,450.63,150.21
+655.39,491.54,163.85
+271.19,203.39,67.8
+642.56,481.92,160.64

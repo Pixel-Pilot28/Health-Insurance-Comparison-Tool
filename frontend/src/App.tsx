@@ -1,10 +1,11 @@
 import React from 'react';
 import { Tabs, Tab, Box, AppBar, Toolbar, Typography, Container, Paper } from '@mui/material';
-import { Input, CompareArrows, Psychology } from '@mui/icons-material';
+import { Input, CompareArrows, Psychology, Build } from '@mui/icons-material';
 import { NavigationProvider, useNavigation } from './contexts/NavigationContext';
 import DataInput from './components/DataInput';
 import Compare from './components/Compare';
 import Recommendations from './components/Recommendations';
+import OpmReconcile from './components/OpmReconcile';
 
 const AppContent: React.FC = () => {
   const { currentTab, navigateToTab } = useNavigation();
@@ -28,6 +29,11 @@ const AppContent: React.FC = () => {
       label: 'Get Recommendations',
       icon: <Psychology />,
       description: 'Get personalized plan recommendations'
+    },
+    {
+      label: 'OPM Reconcile',
+      icon: <Build />,
+      description: 'Review and reconcile OPM parser results'
     }
   ];
 
@@ -86,6 +92,7 @@ const AppContent: React.FC = () => {
           {currentTab === 0 && <DataInput />}
           {currentTab === 1 && <Compare />}
           {currentTab === 2 && <Recommendations />}
+          {currentTab === 3 && <OpmReconcile />}
         </Box>
       </Container>
     </Box>

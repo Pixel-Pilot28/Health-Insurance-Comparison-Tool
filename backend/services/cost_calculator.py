@@ -1,5 +1,5 @@
 import json
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict, Any, Tuple, Optional
 import os
 
 try:
@@ -57,6 +57,381 @@ def calculate_hsa_growth(hsa_contribution: float, hsa_pass_through: float,
 
     return round(total_growth, 2)
     
+
+def map_service_to_column_base(service_name: str) -> str:
+    """
+    Map a service name from user input to the corresponding column base name in parsed data.
+    
+    Args:
+        service_name: Service name from user input (e.g., "PrimaryCareVisit")
+    
+    Returns:
+        Column base name (e.g., "Primary_Care_Office_Visit")
+    
+    Note: These mappings match the exact column names from OPM's 2026-fehb-plan-benefits_100525.xlsx
+    after parsing. The column base excludes suffixes like _money, _percent, _raw, _applies_after_deductible, etc.
+    Service names correspond to keys in service_costs.json.
+    """
+    # Map service names to actual OPM parsed column bases
+    service_mapping = {
+        # Office Visits
+    'Primary Care': 'Primary_Care_Office_Visit',
+    'PrimaryCareVisit': 'Primary_Care_Office_Visit',
+    'Specialist': 'Specialist_Office_Visit',
+    'SpecialistVisit': 'Specialist_Office_Visit',
+        
+        # Emergency & Urgent Care
+        'Emergency Care': 'Emergency_Care',
+        'Urgent Care': 'Urgent_Care',
+        
+        # Inpatient Services
+        'Inpatient Admission': 'Hospital_Inpatient_Cost_Per_Admission',
+        'Room and Board': 'Hospital_Room_Costs',
+        
+        # Outpatient Services
+    'Outpatient Surgery': 'Other_Outpatient_Surgery_Costs',  # parsed columns collapse punctuation
+        
+        # Diagnostic Tests (corrected column names - commas/parens replaced with underscores by parser)
+        'Outpatient Tests': 'Diagnostic_Tests_Or_Procedures_Blood_Tests_X_Rays_Urinalysis_Ultrasounds',
+        'Simple Labs': 'Diagnostic_Tests_Or_Procedures_Blood_Tests_X_Rays_Urinalysis_Ultrasounds',
+        'Complex Labs': 'Diagnostic_Tests_Or_Procedures_CT_Scans_MRIs_PET_Scans',
+        
+        # Prescriptions (Tiers) - regular drug tiers (NOT Medicare Part D EGWP)
+        'Medications Tier 0': 'Tier_0',
+        'Medications Tier 1': 'Tier_1',
+        'Medications Tier 2': 'Tier_2',
+        'Medications Tier 3': 'Tier_3',
+        'Medications Tier 4': 'Tier_4',
+        'Medications Tier 5': 'Tier_5',
+        
+        # Therapy Services
+    'ABA': 'Applied_Behavioral_Analysis_ABA',
+        'Chiropractic': 'Chiropractic',
+    'OT': 'Occupational_Therapy',
+    'Speech Therapy': 'Speech_Therapy',
+    'Physical Therapy': 'Physical_Therapy',
+        
+        # Specialized Services
+        'Infertility Services': 'Diagnosis_And_Treatment_Infertility_Services',
+        'Hearing Services': 'Hearing_Services',
+        'Maternity Care': 'Prenatal_Care_Screening_For_Gestational_Diabetes_Delivery_And_Postpartum_Care_Maternity_Care',
+        
+        # Mental Health
+        'Mental Health Visit': 'Professional_Services_Mental_Health_And_Substance_Use_Disorder',
+    }
+    
+    return service_mapping.get(service_name, service_name)
+
+
+def interpret_legacy_service_value(service_value: Any, avg_service_cost: float) -> Tuple[float, Dict[str, Any]]:
+    """Interpret legacy service values stored in the plan `services` dictionary.
+
+    Legacy data may represent either a flat copay (e.g., 20.0 meaning $20) or a
+    coinsurance percentage already normalised (e.g., 0.2 meaning 20%). We also
+    occasionally encounter string representations like "$25" or "20%". This
+    helper converts those variants into a concrete dollar amount for a single
+    service encounter while returning metadata describing the interpretation.
+    """
+
+    metadata: Dict[str, Any] = {
+        'cost_type': 'legacy_unknown',
+        'legacy_source': 'services_dict',
+        'raw_value': service_value
+    }
+
+    numeric_value: Optional[float] = None
+
+    if isinstance(service_value, (int, float)):
+        numeric_value = float(service_value)
+    elif isinstance(service_value, str):
+        cleaned = service_value.strip()
+        metadata['cleaned_value'] = cleaned
+
+        if cleaned.endswith('%'):
+            try:
+                percent_value = float(cleaned[:-1]) / 100.0
+                metadata['interpreted_percent'] = percent_value
+                metadata['cost_type'] = 'legacy_coinsurance'
+                return round(percent_value * avg_service_cost, 2), metadata
+            except ValueError:
+                pass
+
+        cleaned_numeric = cleaned.replace('$', '').replace(',', '')
+        try:
+            numeric_value = float(cleaned_numeric)
+        except ValueError:
+            metadata['cost_type'] = 'legacy_invalid'
+            return 0.0, metadata
+    else:
+        metadata['cost_type'] = 'legacy_invalid'
+        return 0.0, metadata
+
+    if numeric_value is None:
+        metadata['cost_type'] = 'legacy_invalid'
+        return 0.0, metadata
+
+    if numeric_value <= 1:
+        metadata['interpreted_percent'] = numeric_value
+        metadata['cost_type'] = 'legacy_coinsurance'
+        return round(numeric_value * avg_service_cost, 2), metadata
+
+    metadata['interpreted_copay'] = numeric_value
+    metadata['cost_type'] = 'legacy_copay'
+    return round(numeric_value, 2), metadata
+
+
+def compute_patient_cost(plan_row: Dict[str, Any], service_col_base: str, 
+                        allowed_charge: float, deductible_remaining: float) -> Tuple[float, float, Dict[str, Any]]:
+    """
+    Enhanced cost computation that handles copay-then-coinsurance rules and all parsed benefit fields.
+    
+    This function implements the complete benefit structure parsing including:
+    - Primary copay and/or coinsurance
+    - Secondary (follow-on) copay/coinsurance ("then" rules)
+    - Caps (maximum member responsibility)
+    - Deductible application
+    - Min/max ranges
+    - Coverage status flags
+    
+    Args:
+        plan_row: Dictionary containing plan data with parsed fields
+        service_col_base: Base column name (e.g., "Primary_Care_Office_Visit")
+        allowed_charge: The allowed/average charge for the service
+        deductible_remaining: Current remaining deductible amount
+    
+    Returns:
+        Tuple of (member_cost, updated_deductible_remaining, metadata_dict)
+        - member_cost: Total cost to member for this service
+        - updated_deductible_remaining: Deductible remaining after this service
+        - metadata: Dict with all extracted benefit details and flags
+    """
+    # Extract all possible parsed fields
+    primary_copay = plan_row.get(f"{service_col_base}_money")
+    primary_coinsurance = plan_row.get(f"{service_col_base}_percent")
+    
+    # Secondary/follow-on values (for "then" rules like "$25 then 20%")
+    secondary_copay = plan_row.get(f"{service_col_base}_secondary_copay")
+    secondary_coinsurance = plan_row.get(f"{service_col_base}_secondary_coinsurance")
+    
+    # Caps and ranges
+    cap = plan_row.get(f"{service_col_base}_cap")
+    min_value = plan_row.get(f"{service_col_base}_min_value")
+    max_value = plan_row.get(f"{service_col_base}_max_value")
+    
+    # Flags
+    applies_after_deductible = plan_row.get(f"{service_col_base}_applies_after_deductible", False)
+    first_visit_only = plan_row.get(f"{service_col_base}_first_visit_only", False)
+    network_only = plan_row.get(f"{service_col_base}_network_only", False)
+    prior_auth = plan_row.get(f"{service_col_base}_prior_authorization", False)
+    is_covered = plan_row.get(f"{service_col_base}_is_covered")
+    visits_limit = plan_row.get(f"{service_col_base}_visits_limit")
+    
+    raw = plan_row.get(f"{service_col_base}_raw", "")
+    
+    # Build metadata
+    metadata = {
+        'applies_after_deductible': applies_after_deductible,
+        'first_visit_only': first_visit_only,
+        'network_only': network_only,
+        'prior_authorization': prior_auth,
+        'is_covered': is_covered,
+        'visits_limit': visits_limit,
+        'has_cap': cap is not None,
+        'has_secondary_rule': secondary_copay is not None or secondary_coinsurance is not None,
+        'raw': raw,
+        'cost_type': None
+    }
+    
+    # Check coverage status first
+    # Only treat as not covered if is_covered is explicitly False AND there are
+    # no cost-sharing rules defined (copay or coinsurance).  Blank/empty values
+    # in the CSV get parsed as False by parse_optional_bool, so we must not
+    # short-circuit when actual cost-sharing data exists.
+    if is_covered is False and primary_copay is None and primary_coinsurance is None:
+        metadata['cost_type'] = 'not_covered_full_liability'
+        metadata['not_covered_charge'] = allowed_charge
+        return round(allowed_charge, 2), deductible_remaining, metadata
+    
+    if is_covered is True and primary_copay is None and primary_coinsurance is None:
+        # Fully covered with no cost sharing
+        metadata['cost_type'] = 'covered'
+        return 0.0, deductible_remaining, metadata
+    
+    # Initialize cost calculation
+    total_patient_cost = 0.0
+    remaining_charge = allowed_charge
+    original_deductible = deductible_remaining
+    deductible_applied = 0.0
+    
+    # Step 1: Apply deductible if required
+    if applies_after_deductible and deductible_remaining > 0:
+        deductible_applied = min(remaining_charge, deductible_remaining)
+        total_patient_cost += deductible_applied
+        remaining_charge -= deductible_applied
+        deductible_remaining -= deductible_applied
+        metadata['deductible_applied'] = deductible_applied
+
+    post_deductible_charge = remaining_charge
+    
+    # Step 2: Apply primary cost sharing
+    if primary_copay is not None:
+        # Primary copay exists
+        copay_amount = float(primary_copay)
+        total_patient_cost += copay_amount
+        remaining_charge = max(0.0, remaining_charge - copay_amount)
+        metadata['cost_type'] = 'copay_primary'
+        
+        # Step 3: Check for secondary rule (copay-then-coinsurance)
+        if secondary_coinsurance is not None:
+            coinsurance_base = max(post_deductible_charge, 0.0)
+            coinsurance_amount = (float(secondary_coinsurance) / 100.0) * coinsurance_base
+            total_patient_cost += coinsurance_amount
+            metadata['cost_type'] = 'copay_then_coinsurance'
+            metadata['secondary_amount'] = coinsurance_amount
+        elif secondary_copay is not None:
+            # Apply secondary copay (rare but possible)
+            total_patient_cost += float(secondary_copay)
+            metadata['cost_type'] = 'copay_then_copay'
+            metadata['secondary_amount'] = float(secondary_copay)
+    
+    elif primary_coinsurance is not None:
+        # Primary coinsurance (no copay)
+        coinsurance_base = max(post_deductible_charge, 0.0)
+        if coinsurance_base > 0:
+            coinsurance_amount = (float(primary_coinsurance) / 100.0) * coinsurance_base
+            total_patient_cost += coinsurance_amount
+            metadata['cost_type'] = 'coinsurance_primary'
+        
+        # Check for secondary copay after coinsurance (unusual but possible)
+        if secondary_copay is not None:
+            total_patient_cost += float(secondary_copay)
+            metadata['cost_type'] = 'coinsurance_then_copay'
+            metadata['secondary_amount'] = float(secondary_copay)
+    
+    # Step 4: Handle ranges (min/max)
+    if min_value is not None and max_value is not None:
+        # Cost is within a range - use average or apply logic
+        total_patient_cost = max(float(min_value), min(total_patient_cost, float(max_value)))
+        metadata['cost_type'] = 'range'
+        metadata['range_min'] = float(min_value)
+        metadata['range_max'] = float(max_value)
+    
+    # Step 5: Apply cap (maximum member responsibility)
+    if cap is not None:
+        cap_value = float(cap)
+        cost_excluding_deductible = total_patient_cost - deductible_applied
+        if cost_excluding_deductible > cap_value:
+            total_patient_cost = deductible_applied + cap_value
+            metadata['cap_applied'] = True
+
+    if metadata['cost_type'] is None and deductible_applied > 0 and total_patient_cost == deductible_applied:
+        metadata['cost_type'] = 'deductible_only'
+        return round(total_patient_cost, 2), deductible_remaining, metadata
+    
+    # Fallback: If no cost sharing rules found, check raw field
+    if metadata['cost_type'] is None:
+        if raw:
+            lr = raw.lower().strip()
+            
+            # Check for special strings
+            if any(phrase in lr for phrase in ['not covered', 'excluded', 'not applicable']):
+                metadata['cost_type'] = 'not_covered_full_liability'
+                metadata['not_covered_charge'] = allowed_charge
+                return round(allowed_charge, 2), original_deductible, metadata
+            
+            if any(phrase in lr for phrase in ['no charge', 'covered in full', '100%']):
+                metadata['cost_type'] = 'covered'
+                return 0.0, deductible_remaining, metadata
+        
+        # No rules found - needs review
+        metadata['cost_type'] = 'needs_review'
+        return None, original_deductible, metadata
+    
+    return round(total_patient_cost, 2), deductible_remaining, metadata
+
+
+def compute_cost_for_service(plan_row: Dict[str, Any], service_col_base: str, 
+                            allowed_charge: float) -> Tuple[float, Dict[str, Any]]:
+    """
+    LEGACY: Compute the cost for a specific service using parsed fields with deterministic priority.
+    
+    NOTE: This function is kept for backward compatibility but should be replaced with
+    compute_patient_cost() which handles more complex benefit structures.
+    
+    Priority order:
+    1. money field (direct copay)
+    2. percent field (coinsurance)
+    3. raw field interpretation (covered, not covered, etc.)
+    
+    Args:
+        plan_row: Dictionary containing plan data with parsed fields
+        service_col_base: Base column name (e.g., "Primary_Care_Office_Visit")
+        allowed_charge: The allowed/average charge for the service
+    
+    Returns:
+        Tuple of (cost, metadata_dict)
+        - cost: Member cost for the service (None if special handling needed)
+        - metadata: Dict with flags and parsing info
+    """
+    money = plan_row.get(f"{service_col_base}_money")
+    pct = plan_row.get(f"{service_col_base}_percent")
+    raw = plan_row.get(f"{service_col_base}_raw")
+    
+    # Get special condition flags
+    applies_after_deductible = plan_row.get(f"{service_col_base}_applies_after_deductible", False)
+    first_visit_only = plan_row.get(f"{service_col_base}_first_visit_only", False)
+    network_only = plan_row.get(f"{service_col_base}_network_only", False)
+    prior_auth = plan_row.get(f"{service_col_base}_prior_authorization", False)
+    
+    metadata = {
+        'applies_after_deductible': applies_after_deductible,
+        'first_visit_only': first_visit_only,
+        'network_only': network_only,
+        'prior_authorization': prior_auth,
+        'raw': raw,
+        'cost_type': None  # Will be set to 'copay', 'coinsurance', 'covered', 'not_covered', or 'needs_review'
+    }
+    
+    # Priority 1: Money field (direct copay)
+    if money is not None:
+        metadata['cost_type'] = 'copay'
+        return float(money), metadata
+    
+    # Priority 2: Percent field (coinsurance)
+    if pct is not None:
+        metadata['cost_type'] = 'coinsurance'
+        return (float(pct) / 100.0) * allowed_charge, metadata
+    
+    # Priority 3: Raw field interpretation
+    if raw:
+        lr = raw.lower().strip()
+        
+        # Check for "not covered" first (before "covered")
+        if any(phrase in lr for phrase in ['not covered', 'excluded', 'not applicable']):
+            metadata['cost_type'] = 'not_covered_full_liability'
+            metadata['not_covered_charge'] = allowed_charge
+            return round(allowed_charge, 2), metadata
+        
+        # After deductible - needs special handling (before "covered" check)
+        if 'after deductible' in lr and not money and not pct:
+            metadata['cost_type'] = 'needs_review'
+            return None, metadata
+        
+        # Fully covered
+        if any(phrase in lr for phrase in ['covered', 'in-network', 'in network', '100%']):
+            metadata['cost_type'] = 'covered'
+            return 0.0, metadata
+        
+        # N/A
+        if 'n/a' in lr or 'na' == lr:
+            metadata['cost_type'] = 'not_covered_full_liability'
+            metadata['not_covered_charge'] = allowed_charge
+            return round(allowed_charge, 2), metadata
+    
+    # Default: Unknown/needs manual review
+    metadata['cost_type'] = 'needs_review'
+    return None, metadata
+
 
 def calculate_service_cost(service_cost: float, frequency: int, coverage: Dict[str, Any],
                            deductible_remaining: float, oop_remaining: float) -> Tuple[float, float, float, Dict[str, float]]:
@@ -183,20 +558,46 @@ def calculate_costs(user_input: Dict[str, Any], user_data: Dict[str, Any], tax_r
                 # Group services by month for processing
                 monthly_services = {month: [] for month in range(1, 13)}
                 
+                # Debug: Log user input structure
+                print(f"DEBUG: Processing plan {plan_id}, user_input keys: {list(user_input.keys())}", flush=True)
+                
                 # Process each service from user input (input_details)
                 for service, details in user_input.items():
                     # user_input now only contains service details, no need to skip other fields
                     if not isinstance(details, dict) or 'dates' not in details:
+                        print(f"DEBUG: Skipping {service} - not a dict or no dates", flush=True)
                         continue
+                    
+                    print(f"DEBUG: Processing service {service} with {len(details.get('dates', []))} dates", flush=True)
 
                     # Get average service cost
                     service_cost_value = float(service_costs.get(service, 0.0))
                     
-                    # Retrieve member cost from plan_details['services']
-                    raw_services = plan_details.get('services', {})
-                    if not isinstance(raw_services, dict):
-                        raw_services = {}
-                    member_cost_from_plan = raw_services.get(service, 0.0)  # This is the member copay (like $0.15)
+                    # Map service name to parsed column base
+                    service_col_base = map_service_to_column_base(service)
+                    
+                    # Try to use parsed fields first, fallback to legacy 'services' dict
+                    member_cost, metadata = compute_cost_for_service(
+                        plan_details, 
+                        service_col_base, 
+                        service_cost_value
+                    )
+                    
+                    # Fallback to legacy services dict if parsing returns None
+                    if member_cost is None:
+                        raw_services = plan_details.get('services', {})
+                        if not isinstance(raw_services, dict):
+                            raw_services = {}
+                        member_cost_from_plan = raw_services.get(service, 0.0)
+                        member_cost, legacy_metadata = interpret_legacy_service_value(
+                            member_cost_from_plan,
+                            service_cost_value
+                        )
+                        metadata = {
+                            'applies_after_deductible': False,
+                            'raw': str(member_cost_from_plan),
+                            **legacy_metadata
+                        }
 
                     # Group services by month
                     for date in details.get('dates', []):
@@ -205,49 +606,90 @@ def calculate_costs(user_input: Dict[str, Any], user_data: Dict[str, Any], tax_r
                             monthly_services[month].append({
                                 'service': service,
                                 'date': date,
-                                'avg_cost': service_cost_value,  # Average service cost (not used in calculation)
-                                'member_cost': member_cost_from_plan  # Member cost from plan (this is what we use)
+                                'avg_cost': service_cost_value,
+                                'member_cost': member_cost,
+                                'metadata': metadata
                             })
                         except Exception as e:
                             print(f"Error parsing date '{date}' for service {service}: {e}")
                             continue
 
-                # Process each month in order, using direct service costs from plan data
+                # Process each month in order, using enhanced compute_patient_cost function
                 cumulative_medical_cost = 0.0
                 for month in range(1, 13):
                     monthly_service_cost = 0.0
                     
                     # Process all services for this month
                     for service_info in monthly_services[month]:
-                        # Get the member cost from the plan data and the service cost
-                        member_cost = service_info['member_cost']
+                        service_name = service_info['service']
                         avg_service_cost = service_info['avg_cost']
+                        service_col_base = map_service_to_column_base(service_name)
                         
-                        # Handle different cost formats from the CSV
-                        if isinstance(member_cost, (int, float)):
-                            member_cost_float = float(member_cost)
-                            
-                            # Determine if this is a percentage (coinsurance) or fixed copay
-                            if 0 < member_cost_float <= 1.0:
-                                # This is coinsurance (e.g., 0.15 = 15%)
-                                member_pays = avg_service_cost * member_cost_float
-                                
-                                # Apply deductible logic for coinsurance
-                                if deductible_remaining > 0:
-                                    # If deductible not met, member pays full service cost until deductible is met
-                                    deductible_applied = min(avg_service_cost, deductible_remaining)
-                                    member_pays = deductible_applied + (avg_service_cost - deductible_applied) * member_cost_float
-                                    deductible_remaining -= deductible_applied
-                                else:
-                                    # Deductible met, member pays coinsurance only
-                                    member_pays = avg_service_cost * member_cost_float
+                        # Use enhanced cost computation
+                        member_pays, deductible_remaining, metadata = compute_patient_cost(
+                            plan_details,
+                            service_col_base,
+                            avg_service_cost,
+                            deductible_remaining
+                        )
+                        
+                        # Handle special cases
+                        if member_pays is None:
+                            # Needs manual review - fallback to legacy services dict
+                            print(f"Warning: Service {service_name} needs manual review for plan {plan_id}, using legacy services dict")
+                            # Use the services dict directly
+                            services_dict = plan_details.get('services', {})
+                            if service_name in services_dict:
+                                service_value = services_dict[service_name]
+                                member_pays, legacy_metadata = interpret_legacy_service_value(
+                                    service_value,
+                                    avg_service_cost
+                                )
+                                metadata.update(legacy_metadata)
+
+                                if legacy_metadata.get('cost_type') == 'legacy_coinsurance':
+                                    percent = legacy_metadata.get('interpreted_percent', 0.0) or 0.0
+                                    allowed_charge = avg_service_cost
+                                    deductible_applied = 0.0
+
+                                    if deductible_remaining > 0:
+                                        deductible_applied = min(allowed_charge, deductible_remaining)
+                                        deductible_remaining -= deductible_applied
+                                        allowed_charge -= deductible_applied
+
+                                    coinsurance_amount = round(percent * allowed_charge, 2)
+                                    member_pays = round(deductible_applied + coinsurance_amount, 2)
+
+                                    metadata['deductible_applied'] = metadata.get('deductible_applied', 0.0) + round(deductible_applied, 2)
+                                    metadata['coinsurance_amount'] = coinsurance_amount
+                                    metadata['legacy_coinsurance_applied'] = True
+
+                                    if member_pays == 0.0 and deductible_applied > 0:
+                                        # Ensure we capture full deductible payment when coinsurance portion is zero
+                                        member_pays = round(deductible_applied, 2)
+
+                                print(
+                                    f"  Legacy interpreted {service_name}: "
+                                    f"{legacy_metadata.get('cost_type')} -> ${member_pays:.2f}"
+                                )
                             else:
-                                # This is a fixed copay (e.g., $25, $30)
-                                member_pays = member_cost_float
-                                # Fixed copays typically don't apply to deductible
-                        else:
-                            # Handle string values or complex cost structures
-                            member_pays = 0.0
+                                print(f"  Legacy: {service_name} not found in services dict")
+                                member_pays = 0.0
+                        
+                        elif member_pays == float('inf'):
+                            # Treat as full cost liability if marked as uncovered
+                            print(f"Service {service_name} not covered in plan {plan_id}; applying full cost")
+                            member_pays = round(service_info['avg_cost'], 2)
+                        
+                        # Check for special flags and log warnings
+                        if metadata.get('prior_authorization', False):
+                            print(f"Note: Service {service_name} requires prior authorization for plan {plan_id}")
+                        
+                        if metadata.get('first_visit_only', False):
+                            print(f"Note: Service {service_name} benefit applies to first visit only for plan {plan_id}")
+                        
+                        if metadata.get('visits_limit'):
+                            print(f"Note: Service {service_name} limited to {metadata['visits_limit']} visits for plan {plan_id}")
                         
                         # Apply out-of-pocket maximum
                         if oop_remaining > 0:

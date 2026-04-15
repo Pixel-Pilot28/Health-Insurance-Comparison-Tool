@@ -1,12 +1,24 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Dict, Any, List
-from ..services.cost_calculator import calculate_costs
-from ..models import CalculationPayload
-from .health_plans import get_parsed_health_plans
+try:
+    from ..services.cost_calculator import calculate_costs
+    from ..models import CalculationPayload
+    from .health_plans import get_parsed_health_plans
+except ImportError:
+    from services.cost_calculator import calculate_costs
+    from models import CalculationPayload
+    from routers.health_plans import get_parsed_health_plans
 import json
+import os
+from pathlib import Path
 
 router = APIRouter()
+
+# Get the absolute path to the data directory
+BASE_DIR = Path(__file__).parent.parent
+DATA_DIR = BASE_DIR / "data"
+USER_DATA_FILE = DATA_DIR / "user_payload.json"
 
 
 # Define payload models
@@ -34,9 +46,13 @@ async def save_user_data(data: dict):
     Save user data (e.g., from a form) to a JSON file.
     """
     try:
-        with open("backend/data/user_payload.json", "w") as f:
+        # Ensure the data directory exists
+        DATA_DIR.mkdir(parents=True, exist_ok=True)
+        
+        with open(USER_DATA_FILE, "w") as f:
             json.dump(data, f, indent=4)
         print(f"Received user data: {data}")
+        print(f"Saved to: {USER_DATA_FILE}")
         return {"status": "success", "message": "User data saved successfully", "data": data}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error saving user data: {str(e)}")
@@ -48,11 +64,15 @@ async def get_user_data():
     Retrieve the user payload from the file.
     """
     try:
-        with open("backend/data/user_payload.json", "r") as f:
+        if not USER_DATA_FILE.exists():
+            # Return empty data structure instead of 404 if file doesn't exist yet
+            return {"status": "success", "data": None}
+        
+        with open(USER_DATA_FILE, "r") as f:
             data = json.load(f)
         return {"status": "success", "data": data}
     except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="User data not found")
+        return {"status": "success", "data": None}
     except Exception as e:
         print(f"Error reading user data: {e}")
         raise HTTPException(status_code=500, detail="Failed to read user data")
@@ -75,7 +95,9 @@ def calculate_cost(payload: Payload):
 
         # Convert InputDetails to a dictionary
         input_details_dict = {key: value.dict() for key, value in input_details.items()}
-        # print("Converted Input Details:", input_details_dict)
+        print("=== CALCULATE ENDPOINT ===", flush=True)
+        print(f"Converted Input Details: {list(input_details_dict.keys())}", flush=True)
+        print(f"Number of services: {len(input_details_dict)}", flush=True)
 
         # Convert string values to numbers and tax rate to decimal
         tax_rate = float(user_data["taxRate"]) / 100
@@ -117,6 +139,7 @@ def calculate_cost(payload: Payload):
                 "annual_cost": plan_data["total_cost"],
                 "tax_savings": plan_data["tax_savings"],
                 "cumulative_cost": plan_data["cumulative_cost"],
+                "hsa_growth": plan_data["hsa_growth"],
                 "unused_hsa": plan_data["unused_hsa"],
                 "unused_fsa": plan_data["unused_fsa"]
             }

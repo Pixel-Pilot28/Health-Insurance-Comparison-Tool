@@ -1,15 +1,26 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Dict, List, Any, Optional
-from ..services.recommendation_engine import (
-    RecommendationEngine, 
-    UserPreferences, 
-    RiskTolerance, 
-    CostSensitivity, 
-    CoveragePriority
-)
-from ..services.cost_calculator import calculate_costs
-from .health_plans import get_parsed_health_plans
+try:
+    from ..services.recommendation_engine import (
+        RecommendationEngine, 
+        UserPreferences, 
+        RiskTolerance, 
+        CostSensitivity, 
+        CoveragePriority
+    )
+    from ..services.cost_calculator import calculate_costs
+    from .health_plans import get_parsed_health_plans
+except ImportError:
+    from services.recommendation_engine import (
+        RecommendationEngine, 
+        UserPreferences, 
+        RiskTolerance, 
+        CostSensitivity, 
+        CoveragePriority
+    )
+    from services.cost_calculator import calculate_costs
+    from routers.health_plans import get_parsed_health_plans
 
 router = APIRouter()
 
@@ -102,7 +113,6 @@ async def generate_recommendations(request: RecommendationRequest):
         
         # Step 3: Test user preferences parsing
         try:
-            from ..services.recommendation_engine import UserPreferences, RiskTolerance, CostSensitivity, CoveragePriority
             user_preferences = UserPreferences(
                 risk_tolerance=RiskTolerance(preferences_data.risk_tolerance.lower()),
                 cost_sensitivity=CostSensitivity(preferences_data.cost_sensitivity.lower()),
@@ -123,7 +133,6 @@ async def generate_recommendations(request: RecommendationRequest):
         
         # Step 4: Test cost calculation (this is likely where it was failing)
         try:
-            from ..services.cost_calculator import calculate_costs
             tax_rate_raw = request.user_data.get('taxRate', '30')
             if isinstance(tax_rate_raw, str):
                 tax_rate = float(tax_rate_raw) / 100 if tax_rate_raw else 0.30
