@@ -144,6 +144,42 @@ def apply_plan_overrides(row_data, plan_overrides):
 # -----------------------
 # Main transformation
 # -----------------------
+def determine_enrollment_type(enrollment_code):
+    """Map the trailing enrollment code digit to an enrollment type."""
+    if not enrollment_code:
+        return None
+
+    code = str(enrollment_code).strip()
+    if not code:
+        return None
+
+    last_char = code[-1]
+    if last_char in {"1", "4"}:
+        return "Self"
+    if last_char in {"2", "5"}:
+        return "Self + Family"
+    if last_char in {"3", "6"}:
+        return "Self + One"
+    return None
+
+
+def determine_option_slot(plan_option_counts, plan_code, enrollment_code):
+    """Infer which option slot (0/1) an enrollment code belongs to for a plan."""
+    if not plan_code or not enrollment_code:
+        return None
+
+    option_count = plan_option_counts.get(plan_code, 1)
+    if option_count <= 1:
+        return 0
+
+    last_char = str(enrollment_code).strip()[-1]
+    if last_char in {"1", "2", "3"}:
+        return 0
+    if last_char in {"4", "5", "6"}:
+        return 1
+    return None
+
+
 def transform(benefits_path, payroll_path, out_csv, legacy_out=None, payroll_band=None,
               overrides_path=None, column_map_out=None, min_fuzzy_score=0.6, use_fuzzy=True):
     
@@ -196,6 +232,19 @@ def transform(benefits_path, payroll_path, out_csv, legacy_out=None, payroll_ban
             save_column_map(column_mapping, unmapped_columns, mapping_suggestions, column_map_out)
         
         # Rename columns using mapping (only successfully mapped ones)
+        # Preserve critical identity columns to avoid collisions
+        identity_overrides = {
+            'Plan Option Name': 'Plan Option Name',
+            'Plan Name': 'Plan Name',
+            'Plan Option Type': 'Plan Option Type',
+            'Plan Code': 'Plan Code',
+            'In-network/out-of-network': 'In-network/out-of-network',
+            'Brochure Number': 'Brochure Number'
+        }
+        for original, target in identity_overrides.items():
+            if original in benefits_df.columns:
+                column_mapping[original] = target
+
         rename_dict = {k: v for k, v in column_mapping.items() if k in benefits_df.columns}
         if rename_dict:
             print(f"Renaming {len(rename_dict)} columns using fuzzy mapping...")
@@ -209,14 +258,31 @@ def transform(benefits_path, payroll_path, out_csv, legacy_out=None, payroll_ban
         nlp_parser = ExtendedNLPParser()
         print("NLP parser initialized for complex benefit strings")
 
-    # basic identity columns we expect; but be tolerant if missing
-    id_cols = ['Plan','Short Name','Option','Enrollment Code','Enrollment Type']
-    for c in id_cols:
-        if c not in benefits_df.columns:
-            # try alternate names
-            alternatives = [x for x in benefits_df.columns if c.split()[0].lower() in x.lower()]
-            if alternatives:
-                id_cols[id_cols.index(c)] = alternatives[0]
+    # focus on in-network benefits which drive member costs
+    if 'In-network/out-of-network' in benefits_df.columns:
+        in_network_mask = benefits_df['In-network/out-of-network'].astype(str).str.contains('in-network', case=False, na=False)
+        filtered = benefits_df[in_network_mask].copy()
+        if not filtered.empty:
+            benefits_df = filtered
+
+    # Build ordered list of identity columns present in the sheet
+    identity_candidates = [
+        'Plan',
+        'Plan Name',
+        'Plan Option Name',
+        'Plan Option Type',
+        'Short Name',
+        'Option',
+        'Plan Code',
+        'Brochure Number',
+        'In-network/out-of-network',
+        'Enrollment Code',
+        'Enrollment Type'
+    ]
+    id_cols = []
+    for candidate in identity_candidates:
+        if candidate in benefits_df.columns and candidate not in id_cols:
+            id_cols.append(candidate)
 
     # find premium / gov/emp columns heuristically
     biweekly_total_col = next((c for c in benefits_df.columns if '2025 Biweekly - Total Premium' in c), None)
@@ -259,6 +325,9 @@ def transform(benefits_path, payroll_path, out_csv, legacy_out=None, payroll_ban
         # parse each benefit column
         for c in benefit_columns:
             raw_val = row.get(c)
+            if isinstance(raw_val, pd.Series):
+                non_null = raw_val.dropna()
+                raw_val = non_null.iloc[0] if not non_null.empty else None
             key_base = normalize_column_name(c)
             
             # Use NLP parser for benefit columns if available
@@ -331,24 +400,155 @@ def transform(benefits_path, payroll_path, out_csv, legacy_out=None, payroll_ban
 
     parsed_df = pd.DataFrame(rows)
 
-    # Merge payroll by enrollment code
-    # detect payroll enrollment column
+    # Remove empty enrollment identity columns before merge to avoid suffix duplication
+    for empty_col in ['Enrollment_Code', 'Enrollment_Type']:
+        if empty_col in parsed_df.columns and parsed_df[empty_col].notna().sum() == 0:
+            parsed_df.drop(columns=[empty_col], inplace=True)
+
+    plan_code_col = 'Plan_Code' if 'Plan_Code' in parsed_df.columns else None
+    plan_option_col = 'Plan_Option_Name' if 'Plan_Option_Name' in parsed_df.columns else None
+
+    # Build option index mapping for each plan code
+    if plan_code_col and plan_option_col:
+        seen = {}
+        option_indices = []
+        for _, r in parsed_df[[plan_code_col, plan_option_col]].iterrows():
+            plan_code = r.get(plan_code_col)
+            option_name = r.get(plan_option_col)
+            if plan_code not in seen:
+                seen[plan_code] = []
+            if option_name not in seen[plan_code]:
+                seen[plan_code].append(option_name)
+            option_indices.append(seen[plan_code].index(option_name))
+        parsed_df['Option_Index'] = option_indices
+
+    # Count options per plan code for payroll alignment
+    if plan_code_col and 'Option_Index' in parsed_df.columns:
+        plan_option_counts = (
+            parsed_df[[plan_code_col, 'Option_Index']]
+            .drop_duplicates()
+            .groupby(plan_code_col)['Option_Index']
+            .nunique()
+            .to_dict()
+        )
+    else:
+        plan_option_counts = {}
+
+    # Prepare payroll table with enrollment metadata
     payroll_enrl_col = next((c for c in payroll_df.columns if 'Enrl' in c or 'Enrol' in c or 'Enrollment' in c), None)
-    if payroll_enrl_col and 'Enrollment_Code' in parsed_df.columns:
-        # small normalization to compare types (string vs numeric)
-        parsed_df['Enrollment_Code_str'] = parsed_df['Enrollment_Code'].astype(str).str.strip()
-        payroll_df['Enrl_Code_str'] = payroll_df[payroll_enrl_col].astype(str).str.strip()
-        # join on these
-        merged = parsed_df.merge(payroll_df, left_on='Enrollment_Code_str', right_on='Enrl_Code_str', how='left', suffixes=('','_payroll'))
+    if payroll_enrl_col:
+        payroll_df['Enrollment_Code'] = payroll_df[payroll_enrl_col].astype(str).str.strip()
+        payroll_df['Plan_Code'] = payroll_df['Enrollment_Code'].str[:2]
+        payroll_df['Enrollment_Type'] = payroll_df['Enrollment_Code'].apply(determine_enrollment_type)
+        if plan_option_counts:
+            payroll_df['Option_Index'] = payroll_df.apply(
+                lambda r: determine_option_slot(plan_option_counts, r.get('Plan_Code'), r.get('Enrollment_Code')),
+                axis=1
+            )
+        else:
+            payroll_df['Option_Index'] = 0
+    else:
+        payroll_df['Enrollment_Code'] = None
+        payroll_df['Plan_Code'] = None
+        payroll_df['Enrollment_Type'] = None
+        payroll_df['Option_Index'] = None
+
+    merge_keys_left = []
+    merge_keys_right = []
+    if plan_code_col:
+        merge_keys_left.append(plan_code_col)
+        merge_keys_right.append('Plan_Code')
+    if 'Option_Index' in parsed_df.columns and 'Option_Index' in payroll_df.columns:
+        merge_keys_left.append('Option_Index')
+        merge_keys_right.append('Option_Index')
+
+    if merge_keys_left and payroll_enrl_col:
+        merged = parsed_df.merge(
+            payroll_df,
+            left_on=merge_keys_left,
+            right_on=merge_keys_right,
+            how='left',
+            suffixes=('', '_payroll')
+        )
     else:
         merged = parsed_df.copy()
 
+    # Clean duplicate metadata columns from merge
+    if plan_code_col == 'Plan_Code' and 'Plan_Code_payroll' in merged.columns:
+        merged.drop(columns=['Plan_Code_payroll'], inplace=True)
+    if 'Option_Index_payroll' in merged.columns:
+        merged.drop(columns=['Option_Index_payroll'], inplace=True)
+
+    # Derive premium columns from payroll data
+    for src, dest in [
+        ('Gov_Pays', 'Biweekly_Govt'),
+        ('Emp_Pays', 'Biweekly_Emp'),
+        ('SE_Pays', 'Biweekly_Total_Self'),
+        ('TCC_Pays', 'Biweekly_TCC'),
+        ('MGov_Pays', 'Monthly_Govt'),
+        ('MEmp_Pays', 'Monthly_Emp'),
+        ('MSE_Pays', 'Monthly_Total_Self'),
+        ('MTCC_Pays', 'Monthly_TCC')
+    ]:
+        if src in merged.columns:
+            merged[dest] = merged[src]
+
+    if 'Biweekly_Govt' in merged.columns or 'Biweekly_Emp' in merged.columns:
+        merged['Biweekly_Total'] = merged[['Biweekly_Govt', 'Biweekly_Emp']].sum(axis=1, min_count=1)
+    if 'Monthly_Govt' in merged.columns or 'Monthly_Emp' in merged.columns:
+        merged['Monthly_Total'] = merged[['Monthly_Govt', 'Monthly_Emp']].sum(axis=1, min_count=1)
+
+    if 'Monthly_Govt' in merged.columns:
+        merged['Annual_Govt'] = merged['Monthly_Govt'] * 12
+    if 'Monthly_Emp' in merged.columns:
+        merged['Annual_Emp'] = merged['Monthly_Emp'] * 12
+
+    # Fallback to biweekly calculations if monthly missing
+    if 'Annual_Govt' in merged.columns and 'Biweekly_Govt' in merged.columns:
+        merged.loc[merged['Annual_Govt'].isna(), 'Annual_Govt'] = merged['Biweekly_Govt'] * 26
+    if 'Annual_Emp' in merged.columns and 'Biweekly_Emp' in merged.columns:
+        merged.loc[merged['Annual_Emp'].isna(), 'Annual_Emp'] = merged['Biweekly_Emp'] * 26
+
+    if 'Annual_Govt' in merged.columns and 'Annual_Emp' in merged.columns:
+        merged['Annual_Total'] = merged[['Annual_Govt', 'Annual_Emp']].sum(axis=1, min_count=1)
+
+    # Coverage split percentages
+    if 'Biweekly_Total' in merged.columns:
+        total = merged['Biweekly_Total']
+        if 'Biweekly_Govt' in merged.columns:
+            merged['Govt_pct'] = (merged['Biweekly_Govt'] / total * 100).where(total.notna() & (total != 0))
+        if 'Biweekly_Emp' in merged.columns:
+            merged['Emp_pct'] = (merged['Biweekly_Emp'] / total * 100).where(total.notna() & (total != 0))
+
+    # Ensure enrollment metadata is populated
+    if 'Enrollment_Code' in merged.columns and 'Enrollment_Code_payroll' in merged.columns:
+        merged['Enrollment_Code'] = merged['Enrollment_Code'].fillna(merged['Enrollment_Code_payroll'])
+        merged.drop(columns=['Enrollment_Code_payroll'], inplace=True)
+    elif 'Enrollment_Code_payroll' in merged.columns:
+        merged.rename(columns={'Enrollment_Code_payroll': 'Enrollment_Code'}, inplace=True)
+
+    if 'Enrollment_Type' not in merged.columns and 'Enrollment_Type_payroll' in merged.columns:
+        merged.rename(columns={'Enrollment_Type_payroll': 'Enrollment_Type'}, inplace=True)
+    elif 'Enrollment_Type' in merged.columns and 'Enrollment_Type_payroll' in merged.columns:
+        merged['Enrollment_Type'] = merged['Enrollment_Type'].fillna(merged['Enrollment_Type_payroll'])
+        merged.drop(columns=['Enrollment_Type_payroll'], inplace=True)
+
+    if 'Enrollment_Type' in merged.columns:
+        merged['Enrollment_Type'] = merged['Enrollment_Type'].fillna(
+            merged['Enrollment_Code'].apply(determine_enrollment_type)
+        )
+    if 'Enrollment_Code' in merged.columns:
+        enrollment_codes = merged['Enrollment_Code'].astype(str).str.strip()
+        valid_mask = enrollment_codes.str.len() > 0
+        valid_mask &= enrollment_codes.str.lower() != 'nan'
+        merged = merged[valid_mask].copy()
+        merged['Enrollment_Code'] = enrollment_codes[valid_mask]
+
     # If payroll band was requested, pick corresponding columns (agent must provide exact column-to-use)
-    if payroll_band:
-        if payroll_band in payroll_df.columns:
-            merged['Selected_Payroll_Band'] = merged[payroll_band]
-        else:
-            print(f"Warning: payroll_band {payroll_band} not found in payroll sheet; skipping band selection.")
+    if payroll_band and payroll_band in merged.columns:
+        merged['Selected_Payroll_Band'] = merged[payroll_band]
+    elif payroll_band:
+        print(f"Warning: payroll_band {payroll_band} not found in payroll sheet; skipping band selection.")
 
     # Save parsed CSV
     out_path = Path(out_csv)

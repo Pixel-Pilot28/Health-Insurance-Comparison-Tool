@@ -100,8 +100,8 @@ class TestCopayThenCoinsurance:
         cost, deductible, metadata = compute_patient_cost(
             plan_row, "Emergency_Care", 1000.0, 0.0
         )
-        # $25 copay + 20% of ($1000 - $25) = $25 + $195 = $220
-        assert cost == 220.0
+        # $25 copay + 20% of the allowed charge ($1000) = $225
+        assert cost == 225.0
         assert metadata['cost_type'] == 'copay_then_coinsurance'
         assert metadata['has_secondary_rule']
     
@@ -130,9 +130,9 @@ class TestCopayThenCoinsurance:
             plan_row, "Emergency_Care", 500.0, 300.0
         )
         # Pay $300 to deductible, $200 remaining
-        # Then $25 copay + 20% of ($200 - $25) = $25 + $35 = $60
-        # Total: $300 + $60 = $360
-        assert cost == 360.0
+        # Then $25 copay + 20% of the post-deductible charge ($200)
+        # Total: $300 + $25 + $40 = $365
+        assert cost == 365.0
         assert deductible == 0.0
 
 
@@ -236,8 +236,8 @@ class TestCoverageStatus:
         cost, deductible, metadata = compute_patient_cost(
             plan_row, "Cosmetic", 1000.0, 0.0
         )
-        assert cost == float('inf')
-        assert metadata['cost_type'] == 'not_covered'
+        assert cost == 1000.0
+        assert metadata['cost_type'] == 'not_covered_full_liability'
 
 
 class TestFlags:
@@ -420,8 +420,8 @@ class TestRawFieldFallback:
         cost, deductible, metadata = compute_patient_cost(
             plan_row, "Service", 100.0, 0.0
         )
-        assert cost == float('inf')
-        assert metadata['cost_type'] == 'not_covered'
+        assert cost == 100.0
+        assert metadata['cost_type'] == 'not_covered_full_liability'
     
     def test_raw_covered_in_full(self):
         """Raw field says 'covered in full'"""

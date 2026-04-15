@@ -139,6 +139,7 @@ def calculate_cost(payload: Payload):
                 "annual_cost": plan_data["total_cost"],
                 "tax_savings": plan_data["tax_savings"],
                 "cumulative_cost": plan_data["cumulative_cost"],
+                "hsa_growth": plan_data["hsa_growth"],
                 "unused_hsa": plan_data["unused_hsa"],
                 "unused_fsa": plan_data["unused_fsa"]
             }

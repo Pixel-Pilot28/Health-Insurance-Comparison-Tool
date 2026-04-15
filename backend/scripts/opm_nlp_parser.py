@@ -68,9 +68,9 @@ class ExtendedNLPParser:
                 re.IGNORECASE
             ),
             'prior_auth': re.compile(
-                r'prior\s+authorization|'
-                r'preauthorization|'
-                r'pre[-\s]auth',
+                r'\bprior\s+auth(?:orization)?(?:\s+(?:required|needed|approved))?\b|'
+                r'\bpre[-\s]?auth(?:orization)?\b|'
+                r'\bpreauthorization\b',
                 re.IGNORECASE
             ),
         }
@@ -108,26 +108,29 @@ class ExtendedNLPParser:
         rule = BenefitRule(raw=text)
         text_lower = text.lower().strip()
         
-        # Check coverage status first
+        # Check coverage status first but continue parsing for flags/limits
         if self._check_not_covered(text):
             rule.is_covered = False
             return rule
-        
+
         if self._check_covered(text):
             rule.is_covered = True
             rule.copay = 0.0
-            return rule
-        
+
         # Extract flags
         rule.applies_after_deductible = bool(self.flag_patterns['after_deductible'].search(text))
         rule.first_visit_only = bool(self.flag_patterns['first_visit'].search(text))
         rule.network_only = bool(self.flag_patterns['network_only'].search(text))
         rule.prior_authorization = bool(self.flag_patterns['prior_auth'].search(text))
-        
+
         # Extract visit limits
         visits_match = self.visits_pattern.search(text)
         if visits_match:
             rule.visits_limit = int(visits_match.group(1))
+
+        # If fully covered with flags/limits extracted, return early
+        if rule.is_covered is True and not self.then_pattern.search(text) and not self.or_pattern.search(text) and not self.up_to_pattern.search(text):
+            return rule
         
         # Check for multi-step rules
         if self.then_pattern.search(text):
@@ -194,13 +197,20 @@ class ExtendedNLPParser:
             # Parse second step
             money_second = self.money_pattern.findall(second_part)
             percent_second = self.percent_pattern.findall(second_part)
-            
-            if money_second:
-                rule.secondary_copay = self._clean_money(money_second[0])
-                if len(money_second) > 1:
-                    rule.cap = self._clean_money(money_second[1])
-            elif percent_second:
+
+            if percent_second:
                 rule.secondary_coinsurance = float(percent_second[0])
+
+            if money_second:
+                is_cap_only = (
+                    len(money_second) == 1 and
+                    bool(self.up_to_pattern.search(second_part))
+                )
+
+                if not is_cap_only:
+                    rule.secondary_copay = self._clean_money(money_second[0])
+                    if len(money_second) > 1:
+                        rule.cap = self._clean_money(money_second[1])
             
             # Check for cap in second part
             cap_match = self.up_to_pattern.search(second_part)

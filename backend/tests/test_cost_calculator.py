@@ -14,7 +14,7 @@ class TestMapServiceToColumnBase:
         assert map_service_to_column_base('PrimaryCareVisit') == 'Primary_Care_Office_Visit'
     
     def test_specialist_mapping(self):
-        assert map_service_to_column_base('SpecialistVisit') == 'Specialist_Visit'
+        assert map_service_to_column_base('SpecialistVisit') == 'Specialist_Office_Visit'
     
     def test_unmapped_service(self):
         # Should return the input if not in mapping
@@ -62,16 +62,16 @@ class TestComputeCostForService:
         assert metadata['cost_type'] == 'covered'
     
     def test_not_covered_interpretation(self):
-        """Raw 'Not Covered' should return inf"""
+        """Raw 'Not Covered' should charge the full allowed amount"""
         plan_row = {
             'PCP_Office_Visit_money': None,
             'PCP_Office_Visit_percent': None,
             'PCP_Office_Visit_raw': 'Not Covered'
         }
         cost, metadata = compute_cost_for_service(plan_row, 'PCP_Office_Visit', 150.0)
-        
-        assert cost == float('inf')
-        assert metadata['cost_type'] == 'not_covered'
+
+        assert cost == 150.0
+        assert metadata['cost_type'] == 'not_covered_full_liability'
     
     def test_after_deductible_flag(self):
         """'After deductible' text should return None for special handling"""
@@ -149,9 +149,9 @@ class TestComputeCostForService:
             'PCP_Office_Visit_raw': 'Excluded'
         }
         cost, metadata = compute_cost_for_service(plan_row, 'PCP_Office_Visit', 150.0)
-        
-        assert cost == float('inf')
-        assert metadata['cost_type'] == 'not_covered'
+
+        assert cost == 150.0
+        assert metadata['cost_type'] == 'not_covered_full_liability'
     
     def test_coinsurance_calculation(self):
         """Verify coinsurance is correctly calculated"""
