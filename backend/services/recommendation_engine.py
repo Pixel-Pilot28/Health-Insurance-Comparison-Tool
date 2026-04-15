@@ -81,10 +81,10 @@ class RecommendationEngine:
         reasons = []
         score = 0.0
         
-        annual_cost = float(plan_data.get('annual_cost', 0))
-        monthly_premium = float(plan_data.get('premium', 0))
-        deductible = float(plan_data.get('deductible', 0))
-        tax_savings = float(plan_data.get('tax_savings', 0))
+        annual_cost = float(plan_data.get('total_cost', plan_data.get('annual_cost', 0)))
+        monthly_premium = float(plan_data.get('premium', 0) or 0)
+        deductible = float(plan_data.get('deductible', 0) or 0)
+        tax_savings = float(plan_data.get('tax_savings', 0) or 0)
         
         # Cost sensitivity scoring
         if user_preferences.cost_sensitivity == CostSensitivity.VERY_HIGH:
@@ -139,8 +139,8 @@ class RecommendationEngine:
         reasons = []
         score = 0.0
         
-        services = plan_data.get('services', {})
-        oop_max = float(plan_data.get('oop_max', float('inf')))
+        services = plan_data.get('services', {}) or {}
+        oop_max = float(plan_data.get('oop_max', None) or float('inf'))
         
         # Coverage priority scoring
         if user_preferences.coverage_priority == CoveragePriority.COMPREHENSIVE:
@@ -209,9 +209,9 @@ class RecommendationEngine:
         reasons = []
         score = 0.0
         
-        deductible = float(plan_data.get('deductible', 0))
-        oop_max = float(plan_data.get('oop_max', float('inf')))
-        monthly_premium = float(plan_data.get('premium', 0))
+        deductible = float(plan_data.get('deductible', 0) or 0)
+        oop_max = float(plan_data.get('oop_max', None) or float('inf'))
+        monthly_premium = float(plan_data.get('premium', 0) or 0)
         
         if user_preferences.risk_tolerance == RiskTolerance.CONSERVATIVE:
             # Prefer predictable costs, lower deductibles
@@ -259,22 +259,28 @@ class RecommendationEngine:
         
         for service_type in service_types:
             if service_type in services:
-                copay = float(services[service_type])
-                # Lower copays = better coverage
-                if copay == 0:
-                    service_score = 1.0
-                elif copay <= 25:
-                    service_score = 0.8
-                elif copay <= 50:
-                    service_score = 0.6
-                elif copay <= 100:
-                    service_score = 0.4
-                else:
-                    service_score = 0.2
-                
+                raw = services[service_type]
+                try:
+                    if isinstance(raw, str):
+                        stripped = raw.strip()
+                        if stripped.endswith('%'):
+                            # Coinsurance — lower % is better coverage
+                            pct = float(stripped.rstrip('%'))
+                            service_score = 1.0 if pct == 0 else (0.9 if pct <= 10 else (0.7 if pct <= 20 else (0.5 if pct <= 30 else 0.3)))
+                        elif stripped.lower() in ('not covered', 'not applicable', 'n/a', ''):
+                            service_score = 0.0
+                        else:
+                            copay = float(stripped.replace('$', '').replace(',', ''))
+                            service_score = 1.0 if copay == 0 else (0.8 if copay <= 25 else (0.6 if copay <= 50 else (0.4 if copay <= 100 else 0.2)))
+                    else:
+                        copay = float(raw)
+                        service_score = 1.0 if copay == 0 else (0.8 if copay <= 25 else (0.6 if copay <= 50 else (0.4 if copay <= 100 else 0.2)))
+                except (TypeError, ValueError):
+                    service_score = 0.5  # Unknown — neutral score
+
                 total_score += service_score
                 evaluated_services += 1
-        
+
         return total_score / max(evaluated_services, 1)
     
     def generate_recommendations(self, health_plans: Dict[str, Any], 
@@ -290,11 +296,15 @@ class RecommendationEngine:
             enrollment_type = user_cost_data.get('planType', 'Self')
             if plan_data.get('enrollment_type') != enrollment_type:
                 continue
-            
-            # Calculate component scores
-            cost_score, cost_reasons = self.calculate_cost_score(plan_data, user_preferences)
-            coverage_score, coverage_reasons = self.calculate_coverage_score(plan_data, user_preferences)
-            risk_score, risk_reasons = self.calculate_risk_score(plan_data, user_preferences)
+
+            try:
+                # Calculate component scores
+                cost_score, cost_reasons = self.calculate_cost_score(plan_data, user_preferences)
+                coverage_score, coverage_reasons = self.calculate_coverage_score(plan_data, user_preferences)
+                risk_score, risk_reasons = self.calculate_risk_score(plan_data, user_preferences)
+            except Exception as e:
+                print(f"DEBUG: Skipping plan {plan_id} due to scoring error: {e}", flush=True)
+                continue
             
             # Calculate weighted total score
             total_score = (
